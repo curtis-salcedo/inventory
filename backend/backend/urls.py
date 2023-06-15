@@ -1,5 +1,5 @@
 """
-URL configuration for inventory project.
+URL configuration for backend project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.2/topics/http/urls/
@@ -15,8 +15,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from rest_framework import routers
+from inventory import views
+
+routers = routers.DefaultRouter()
+routers.register('business', views.BusinessView)
+routers.register('category', views.CategoryView)
+
+# /inventory/ - returns a list of all the inventory items, CREATE and READ can be performed here
+# /inventory/<id> - returns a specific inventory item, UPDATE and DELETE can be performed here
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include(routers.urls))
 ]
