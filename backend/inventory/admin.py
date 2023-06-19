@@ -1,13 +1,16 @@
 from django.contrib import admin
 from .models import Business, Category
 
-class Business(admin.ModelAdmin):
+class BusinessAdmin(admin.ModelAdmin):
     list = ('name', 'address', 'phone_number', 'email')
 
-    admin.site.register(Business)
+    # admin.site.register(Business, BusinessAdmin)
 
-class Category(admin.ModelAdmin):
+class CategoryAdmin(admin.ModelAdmin):
     list = ('name', 'description', 'business')
 
-    admin.site.register(Category)
+    # admin.site.register(Category, CategoryAdmin)
+
+admin.site.register(Category, CategoryAdmin)
+admin.site.register(Business, BusinessAdmin)
 

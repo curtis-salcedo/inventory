@@ -19,14 +19,13 @@ from django.urls import path, include
 from rest_framework import routers
 from inventory import views
 
-routers = routers.DefaultRouter()
-routers.register('business', views.BusinessView)
-routers.register('category', views.CategoryView)
-
-# /inventory/ - returns a list of all the inventory items, CREATE and READ can be performed here
-# /inventory/<id> - returns a specific inventory item, UPDATE and DELETE can be performed here
+router = routers.DefaultRouter()
+router.register('business', views.BusinessView)
+router.register('category', views.CategoryView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(routers.urls))
+    path('api/', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
+
