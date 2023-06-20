@@ -20,8 +20,13 @@ from rest_framework import routers
 from inventory import views
 
 router = routers.DefaultRouter()
+router.register('user', views.UserView)
 router.register('business', views.BusinessView)
+router.register('location', views.LocationView)
 router.register('category', views.CategoryView)
+router.register('products', views.ProductView)
+router.register('inventory', views.InventoryView)
+router.register('monthly_inventory', views.MonthlyInventoryView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
