@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Business, Location, Category, Product, Inventory, MonthlyInventory
+from .models import User, Business, Location, Category, Product, InventoryItem, Inventory, ProductMixTemplate
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -26,12 +26,17 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = ('product_id', 'category', 'name', 'description', 'product_number', 'description', 'vendor', 'vendor_product_number', 'price', 'case_size', 'count_by')
 
+class InventoryItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InventoryItem
+        fields = ('inventory_item_id', 'product', 'category', 'quantity', 'total', 'price')
+
 class InventorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Inventory
-        fields = ('inventory_id', 'location', 'product', 'quantity', 'total', 'created_at', 'updated_at')
+        fields = ('inventory_id', 'location', 'created_at', 'updated_at', 'name', 'month', 'year')
 
-class MonthlyInventorySerializer(serializers.ModelSerializer):
+class ProductMixTemplateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MonthlyInventory
-        fields = ('monthly_inventory_id', 'location', 'product', 'date', 'quantity', 'notes')
+        model = ProductMixTemplate
+        fields = ('product_mix_template_id', 'business', 'name', 'created_at', 'updated_at', 'description', 'item_list')

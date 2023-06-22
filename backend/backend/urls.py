@@ -25,12 +25,19 @@ router.register('business', views.BusinessView)
 router.register('location', views.LocationView)
 router.register('category', views.CategoryView)
 router.register('products', views.ProductView)
+router.register('inventory_items', views.InventoryItemView)
 router.register('inventory', views.InventoryView)
-router.register('monthly_inventory', views.MonthlyInventoryView)
+router.register('product_mix', views.ProductMixTemplateView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+
+    # Inventory URLs
+    path('api/create_inventory/', views.create_inventory, name='create_inventory'),
+
+    # Product Mix URLs
+    path('api/create_product_mix/', views.create_product_mix, name='create_product_mix'),
 ]
 

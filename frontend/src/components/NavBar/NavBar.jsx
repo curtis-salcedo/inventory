@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 
 // CSS Import
 import './NavBar.css'
-import InventoryCountPage from '../../pages/InventoryCountPage/InventoryCountPage';
+
 
 export default function NavBar() {
 
@@ -24,13 +24,10 @@ export default function NavBar() {
 
     <>
       <div>
+        <Link to={'/'}>Home</Link>
+      </div>
+      <div>
         <Link to={`/inventory`}>Count Inventory Page</Link>
-      </div>
-      <div>
-        <Link>Category Page</Link>
-      </div>
-      <div>
-        <Link>Business Details</Link>
       </div>
     </>
 
