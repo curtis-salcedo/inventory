@@ -6,6 +6,7 @@ import { Routes, Route } from 'react-router-dom';
 // Page Imports
 import LandingPage from "../LandingPage/LandingPage";
 import InventoryPage from "../InventoryPage/InventoryPage";
+import BusinessPage from "../BusinessPage/BusinessPage";
 
 // Component Imports
 import NavBar from "../../components/NavBar/NavBar";
@@ -28,6 +29,7 @@ export default function App() {
         {/* Route components in here */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/inventory" element={<InventoryPage />} />
+        <Route path="/business" element={<BusinessPage />} />
       </Routes>
     </main>
   );

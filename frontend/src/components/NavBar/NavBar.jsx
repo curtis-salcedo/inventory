@@ -29,6 +29,9 @@ export default function NavBar() {
       <div>
         <Link to={`/inventory`}>Count Inventory Page</Link>
       </div>
+      <div>
+        <Link to={'/business'}>Business Page</Link>
+      </div>
     </>
 
   <div>

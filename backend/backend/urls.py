@@ -20,7 +20,7 @@ from rest_framework import routers
 from inventory import views
 
 router = routers.DefaultRouter()
-router.register('user', views.UserView)
+router.register('User', views.CustomUserView)
 router.register('business', views.BusinessView)
 router.register('location', views.LocationView)
 router.register('category', views.CategoryView)
@@ -36,8 +36,14 @@ urlpatterns = [
 
     # Inventory URLs
     path('api/create_inventory/', views.create_inventory, name='create_inventory'),
+    path('api/create_inventory_sheet/', views.create_inventory_sheet, name='create_inventory_sheet'),
 
     # Product Mix URLs
     path('api/create_product_mix/', views.create_product_mix, name='create_product_mix'),
+    path('api/update_product_mix_items/', views.update_product_mix_items, name='update_product_mix_items'),
+    path('api/get_product_mix_items/', views.get_product_mix_items, name='get_product_mix_items'),
+
+    # Inventory Item URLs
+    path('api/find_inventory_item/', views.find_inventory_item, name='find_inventory_item'),
 ]
 

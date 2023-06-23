@@ -31,6 +31,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -44,6 +45,10 @@ INSTALLED_APPS = [
     'rest_framework',
     'inventory',
 ]
+
+# Custom User model class
+
+AUTH_USER_MODEL = 'inventory.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -1,23 +1,25 @@
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
+from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
 
-# User Model
-class User(models.Model):
-    user_id = models.AutoField(primary_key=True)
-    username = models.CharField(max_length=100)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=20)
-    email = models.CharField(max_length=50)
-    phone = models.CharField(max_length=20)
-    password = models.CharField(max_length=100)
-    business = models.ForeignKey('Business', on_delete=models.CASCADE, related_name='users')
-    is_active = models.BooleanField(default=True)
+from .managers import CustomUserManager
+
+# CustomUser Model
+class CustomUser(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(_("email address"), unique=True)
     is_staff = models.BooleanField(default=False)
     is_manager = models.BooleanField(default=False)
-    is_admin = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    date_joined = models.DateTimeField(default=timezone.now)
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
+
+    objects = CustomUserManager()
 
     def __str__(self):
-        return self.username
+        return self.email
 
 
 # Business Model
@@ -71,13 +73,26 @@ class Product(models.Model):
 # InventoryItem Model for putting products into a countable object
 class InventoryItem(models.Model):
     inventory_item_id = models.AutoField(primary_key=True)
-    inventory = models.ForeignKey('Inventory', on_delete=models.CASCADE, related_name='inventoryitems', null=True)
+    inventory_name = models.CharField(max_length=100, null=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='inventoryitems')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='inventoryitems', null=True)
     quantity = models.IntegerField(default=0)
     total = models.FloatField(default=0.0)
     price = models.FloatField(null=True)
 
+    def __str__(self):
+        return (f"{self.product.name} - {self.category}")
+
+class ProductMixTemplate(models.Model):
+    product_mix_template_id = models.AutoField(primary_key=True)
+    location_id  = models.ForeignKey(Location, on_delete=models.CASCADE, related_name = 'productmixtemplates')
+    location_name = models.CharField(max_length=100, null=True)
+    name = models.CharField(max_length=100, null=True)
+    description = models.CharField(max_length=100, null=True)
+    item_list = models.ManyToManyField(InventoryItem, related_name='productmixtemplates')
+
+    def __str__(self):
+        return self.name
 
 # Inventory Model
 class Inventory(models.Model):
@@ -89,15 +104,8 @@ class Inventory(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
     name = models.CharField(max_length=100)
+    item_list = models.ManyToManyField(InventoryItem)
 
     def __str__(self):
         return self.name
     
-class ProductMixTemplate(models.Model):
-    product_mix_template_id = models.AutoField(primary_key=True)
-    location_id  = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='productmixtemplates', null=True)
-    name = models.CharField(max_length=100)
-    description = models.CharField(max_length=100)
-    created_at = models.DateTimeField(auto_now_add=True, null=True)
-    updated_at = models.DateTimeField(auto_now=True, null=True)
-    item_list = models.ManyToManyField(Product, related_name='productmixtemplates')

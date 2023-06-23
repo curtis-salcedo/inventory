@@ -108,7 +108,7 @@ export default function InventoryCountPage() {
 
   return (
     <main>
-      <ProductMix />
+      {/* <ProductMix /> */}
       <button onClick={() => handleShowCreateInventoryShell()}>CreateInventoryShell
       </button>
 

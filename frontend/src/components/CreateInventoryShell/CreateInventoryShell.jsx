@@ -69,6 +69,8 @@ export default function CreateInventoryShell({ handleShowCreateInventoryShell })
       name: inventoryName,
     };
 
+    console.log(inventoryData)
+
     if (activeInventory.inventory_id) {
       axios
         .put(`/api/inventory/${activeInventory.inventory_id}/`, inventoryData)

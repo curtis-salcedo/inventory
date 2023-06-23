@@ -4,7 +4,7 @@ import axios from "axios";
 import { DataContext } from '../../utilities/DataContext';
 
 // Component Imports
-import InventoryShell from '../InventoryShell/InventoryShell';
+import InventorySheet from '../InventorySheet/InventorySheet';
 
 // Styling Imports
 import {
@@ -74,7 +74,7 @@ export default function ShowInventoryShells() {
       <div>
         <h2>Currently Viewing Inventory</h2>
         { activeInventory ? 
-          <InventoryShell activeInventory={activeInventory} setActiveInventory={setActiveInventory}/>
+          <InventorySheet activeInventory={activeInventory} setActiveInventory={setActiveInventory}/>
         : null }
       </div>
 
