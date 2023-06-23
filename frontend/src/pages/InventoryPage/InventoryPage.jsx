@@ -6,117 +6,75 @@ import { DataContext } from '../../utilities/DataContext';
 
 // Component Imports
 import CreateInventoryShell from '../../components/CreateInventoryShell/CreateInventoryShell';
-import ShowInventoryShell from '../../components/ShowInventories/ShowInventories';
-import ProductMix from '../../components/ProductMix/ProductMix';
+import InventorySheet from '../../components/InventorySheet/InventorySheet';
 
 // Styling Imports
-import { Form, FormGroup, Input } from 'reactstrap';
+import { Label, Button, Form, FormGroup, Input } from 'reactstrap';
 
 // Axios CSRF Token Setup
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.xsrfCookieName = "csrftoken";
 
 export default function InventoryCountPage() {
-  const [viewCompleted, setViewCompleted] = useState(false);
-  const [productList, setProductList] = useState([]);
-  const [inventoryItemList, setInventoryItemList] = useState([]);
-  const [inventoryList, setInventoryList] = useState([]);
-  const [locationList, setLocationList] = useState([]);
-  const [itemList, setItemList] = useState([]);
-  const [modal, setModal] = useState(false);
   
   // Show Component Handles
   const [showCreateInventoryShell, setShowCreateInventoryShell] = useState(false);
-  const [showInventoryShell, setShowInventoryShell] = useState(false);
+  const [showInventory, setShowInventory] = useState(false);
+  const [activeInventoryId, setActiveInventoryId] = useState([])
 
   // Data Imports
-  const { inventory, inventoryItems, products, category } = useContext(DataContext);
-
-  // Create InventoryItem's based on every product in the productList
-  async function createInventoryItems() {
-    let itemList = productList.map((p) => {
-      return {
-        product: p.product_id,
-        category: p.category,
-        quantity: 0,
-        total: 0.0,
-      };
-    });
-    itemList.forEach((item) => {
-      console.log('itemList', item)
-      axios
-      .post("/api/inventory_items/", item)
-      .then((res) => {
-        console.log('res', res)
-        setInventoryItemList(res.data)
-        refreshProductList();
-      })
-      .catch((err) => console.log(err));
-    });
-    // setInventoryItemList(itemList);
-    refreshProductList();
-  } 
+  const { business, inventory, products, category } = useContext(DataContext);
 
   const handleInventorySubmit = (inventory) => {
     if (inventory.inventory_id) {
       axios
-        .put(`/api/inventory/${inventory.inventory_id}/`, inventory)
-        .then((res) => refreshProductList());
+        .patch(`/api/inventory/${inventory.inventory_id}/`, inventory)
+        .then((res) => console.log(res.data));
       return;
     }
     axios
       .post("/api/inventory/", inventory)
-      .then((res) => refreshProductList());
-  };
-
-  useEffect(() => {
-    setItemList(inventoryItemList);
-    refreshProductList();
-    refreshInventoryList();
-    refreshLocaitonList();
-  }, []);
-
-  // Refresh data via AXIOS
-  const refreshInventoryList = () => {
-    axios
-      .get("/api/inventory/")
-      .then((res) => setInventoryList(res.data))
-      .catch((err) => console.log(err));
-  };
-
-  const refreshProductList = () => {
-    axios
-      .get("/api/products/")
-      .then((res) => setProductList(res.data))
-      .catch((err) => console.log(err));
-  };
-
-  const refreshLocaitonList = () => {
-    axios
-      .get("/api/location/")
-      .then((res) => setLocationList(res.data))
-      .catch((err) => console.log(err));
+      .then((res) => console.log(res.data));
   };
 
   const handleShowCreateInventoryShell = () => {
     setShowCreateInventoryShell(!showCreateInventoryShell);
   }
 
-  const handleShowInventoryShell = () => {
-    setShowInventoryShell(!showInventoryShell);
+  const handleShowInventory = () => {
+    setShowInventory(!showInventory);
   }
+
+  const handleSelectInventory = (e, id) => {
+    setShowInventory(!showInventory)
+    setActiveInventoryId(id)
+  }
+
+
+  useEffect(() => {
+  }, []);
 
   return (
     <main>
-      {/* <ProductMix /> */}
+      <div>
+        { inventory.map((i) => (
+          <Button
+          key={i.inventory_id}
+          value={i.inventory_id}
+          name="inventory_id"
+          onClick={(e) => handleSelectInventory(e, i.inventory_id)}
+          >
+            {i.name}
+          </Button>
+        )
+        )}
+      </div>
+
       <button onClick={() => handleShowCreateInventoryShell()}>CreateInventoryShell
       </button>
 
-      <button onClick={() => handleShowInventoryShell()}>ShowInventories</button>
-
       <button onClick={() => handleInventorySubmit()}>Test Submit (Don't Use) </button>
 
-      <button onClick={() => createInventoryItems()}>CreateItems</button>
       <div>
         { showCreateInventoryShell ? (
           <CreateInventoryShell
@@ -126,10 +84,11 @@ export default function InventoryCountPage() {
       </div>
       
       <div>
-        { showInventoryShell ? (
-          <ShowInventoryShell
-          handleShowInventoryShell={handleShowInventoryShell}
-          inventoryList={inventoryList}/>
+        { showInventory ? (
+          <InventorySheet
+            activeInventoryId={activeInventoryId}
+            handleShowInventory={handleShowInventory}
+          />
           ) : ( null
         )}
       </div>

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { DataContext } from "../../utilities/DataContext";
 
 import {
   Button,
@@ -11,7 +12,6 @@ import {
   FormGroup,
   Input,
   Label,
-  Dropdown,
 } from "reactstrap";
 
 export default class AddProductModal extends Component {
@@ -21,6 +21,20 @@ export default class AddProductModal extends Component {
       activeItem: this.props.activeItem,
     };
   }
+
+  componentDidMount = () => {
+    this.fetchCategories();
+  };
+
+  fetchCategories = () => {
+    axios
+      .get("/api/category/")
+      .then((res) => {
+        console.log(res.data)
+        this.setState({ categories: res.data });
+      })
+      .catch((err) => console.log(err));
+  };
 
   handleChange = (e) => {
     let { name, value } = e.target;
@@ -33,22 +47,24 @@ export default class AddProductModal extends Component {
 
   render() {
     const { toggle, onSave } = this.props;
+    const { categories } = this.state;
 
     return (
       <Modal isOpen={true} toggle={toggle}>
       <ModalHeader toggle={toggle}>Add A Product</ModalHeader>
       <ModalBody>
         <Form>
+
           <FormGroup>
             <Label for="product-category">Product Category</Label>
-            <Input
-              type="text"
-              id="product-category"
-              name="category"
-              value={this.state.activeItem.category}
-              onChange={this.handleChange}
-              placeholder="Select the Category"
-            />
+            <Input type="select" id="category" name="category" onChange={this.handleChange} >
+            <option value="">Select Category</option>
+            {categories && categories.map((c) => {
+              return (
+                <option value={c.category_id} key={c.category_id}>{c.name}</option>
+              )
+            })}
+            </Input>
           </FormGroup>
     
           <FormGroup>
@@ -84,30 +100,6 @@ export default class AddProductModal extends Component {
               value={this.state.activeItem.product_number}
               onChange={this.handleChange}
               placeholder="Enter the product number"
-            />
-          </FormGroup>
-    
-          <FormGroup>
-            <Label for="product-vendor">Vendor</Label>
-            <Input
-              type="text"
-              id="product-vendor"
-              name="vendor"
-              value={this.state.activeItem.vendor}
-              onChange={this.handleChange}
-              placeholder="Enter the vendor"
-            />
-          </FormGroup>
-    
-          <FormGroup>
-            <Label for="product-vendor-number">Vendor Product Number</Label>
-            <Input
-              type="text"
-              id="product-vendor-number"
-              name="vendor_product_number"
-              value={this.state.activeItem.vendor_product_number}
-              onChange={this.handleChange}
-              placeholder="Enter the vendor product number"
             />
           </FormGroup>
     

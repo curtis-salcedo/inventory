@@ -119,16 +119,9 @@ export default function InventoryShell({ activeInventory, setActiveInventory }) 
       .catch((err) => console.log(err));
   };
 
-
-  // Modal Functions
-
-
   return (
     <div>
       <h1>Inventory Shell</h1>
-      <div>
-        
-      </div>
       <h2>{activeInventory.name}</h2>
       <h3>{activeInventory.location}</h3>
       <Form>

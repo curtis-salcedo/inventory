@@ -4,7 +4,7 @@ from .models import CustomUser, Business, Location, Category, Product, Inventory
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = all
+        fields = ('email',)
 
 class BusinessSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,17 +24,17 @@ class CategorySerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ('product_id', 'category', 'name', 'description', 'product_number', 'description', 'vendor', 'vendor_product_number', 'price', 'case_size', 'count_by')
+        fields = ('product_id', 'category', 'name', 'description', 'product_number', 'description', 'price', 'case_size', 'count_by')
 
 class InventoryItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = InventoryItem
-        fields = ('inventory_item_id', 'product', 'category', 'quantity', 'total', 'price')
+        fields = ('inventory_item_id', 'inventory_id', 'product', 'category', 'quantity', 'total', 'price')
 
 class InventorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Inventory
-        fields = ('inventory_id', 'location', 'created_at', 'updated_at', 'name', 'month', 'year', 'item_list', 'user')
+        fields = ('inventory_id', 'location', 'created_at', 'updated_at', 'name', 'month', 'year', 'item_list')
 
 class ProductMixTemplateSerializer(serializers.ModelSerializer):
     class Meta:

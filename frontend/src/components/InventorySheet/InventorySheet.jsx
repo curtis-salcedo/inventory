@@ -3,6 +3,7 @@ import axios from "axios";
 // Data Imports
 import { DataContext } from '../../utilities/DataContext';
 // Component Imports
+import ItemDetail from '../ItemDetail/ItemDetail';
 
 // Styling Imports
 import {
@@ -13,16 +14,16 @@ import {
   Label,
 } from "reactstrap";
 
-export default function InventorySheet({ activeInventory }) {
+
+export default function InventorySheet({ activeInventoryId }) {
   // Data from DataContext.js file
   const { products, category, inventory } = useContext(DataContext);
   const [ activeInventoryItems, setActiveInventoryItems ] = useState([])
   const [ activeProductList, setActiveProductList ] = useState([])
+  const [ itemDetail, setItemDetail ] = useState(false)
+  const [ currentItem, setCurrentItem ] = useState([])
 
   const [ item, setItem ] = useState({
-    inventory: "",
-    product:"",
-    category: "",
     quantity: "",
     total: "",
     price: "",
@@ -33,32 +34,66 @@ export default function InventorySheet({ activeInventory }) {
     return lookup;
   }, {});
 
-  const handleChange = (e, productId, productPrice) => {
+  const handleChange = (e, price, total, category) => {
+    fetchInventoryItems();
     const { name, value } = e.target;
-    setItem({
-      ...item,
-      product: productId,
-      price: productPrice,
-      quantity: value,
-      inventory: activeInventory.inventory_id,
+    console.log(name, value, price, total);
+  
+    const updatedItems = activeInventoryItems.map((item) => {
+      if (item.inventory_item_id === name) {
+        return {
+          ...item,
+          quantity: value,
+          total: value * price,
+        };
+      }
+      return item;
     });
+  
+    setActiveInventoryItems(updatedItems);
+  
+    let totalCalc = value * price;
+    const updatedItem = {
+      inventory_item_id: name,
+      price: price.toString(),
+      quantity: value.toString(),
+      total: totalCalc.toFixed(2).toString(),
+    };
+
+    axios.patch(`/api/inventory_items/${name}/`, updatedItem)
+      .then((res) => console.log(res.data));
+    fetchInventoryItems();
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     try {
       axios
-        .post("/api/create_inventory_sheet/", )
-
+        .put(`/api/update_inventory_sheet/${activeInventoryId}`, activeInventoryItems)
+        .then((res) => console.log(res.data));
     } catch (error) {
       console.log('error')
     }
   }
 
+  const fetchInventoryItems = async () => {
+  axios
+    .get(`/api/get_inventory_items/?inventory_id=${activeInventoryId}`)
+    .then((res) => setActiveInventoryItems(res.data))
+    .catch((error) => {
+      console.error('Error fetching inventory items:', error);
+    });
+  };
+
+  const showItemDetail = (e, id) => {
+    setCurrentItem(id)
+    setItemDetail(!itemDetail)
+  }
 
   useEffect(() => {
+    fetchInventoryItems()
     setActiveProductList(products)
-  }, [products])
+  }, [activeInventoryId])
 
   return (
     <div>
@@ -73,6 +108,7 @@ export default function InventorySheet({ activeInventory }) {
         <table>
           <thead>
             <tr>
+              <th>Item ID</th>
               <th>Name</th>
               <th>Category</th>
               <th>Price</th>
@@ -83,28 +119,40 @@ export default function InventorySheet({ activeInventory }) {
             </tr>
           </thead>
           <tbody>
-            { activeProductList &&
-            activeProductList.map((p) => (
-              <tr key={p.product_id}>
-              <td>{p.name}</td>
-              <td>{categoryLookup[p.category]?.name}</td>
-              <td>{p.category}</td>
-              <td>{p.price}</td>
-              <td>{p.count_by}</td>
+            { activeInventoryItems &&
+            activeInventoryItems.map((i) => (
+              <tr key={i.inventory_item_id}>
+              <td>{i.inventory_item_id}</td>
+              <td >{i.name}</td>
+              <td>{i.category}</td>
+              <td>{i.price}</td>
+              <td>{i.count_by}</td>
               <td>
                 <Input
-                key={p.product_id}
+                key={i.inventory_item_id}
                 type="number"
                 id="quantity"
-                name={p.product_id}
-                onChange={(e) => handleChange(e, p.product_id, p.price)}
-                defaultValue={0}
+                name={i.inventory_item_id}
+                onChange={(e) => handleChange(e, i.price, i.total)}
+                defaultValue={i.quantity}
                 />
                 </td>
-                <td>{}Total here eventually</td>
-                <td>Details here eventually</td>
+                <td>$ {i.total}</td>
+                <td><Button
+                  onClick={(e) => showItemDetail(e, i.inventory_item_id)}
+                >Details</Button></td>
               </tr>
             ))}
+
+            { itemDetail &&
+              <tr>
+                <ItemDetail
+                  currentItem={currentItem}
+                  itemDetail={itemDetail}
+                  setItemDetail={setItemDetail}
+                />
+              </tr>
+            }
           </tbody>
         </table>
       </Form>

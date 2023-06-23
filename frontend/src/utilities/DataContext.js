@@ -11,6 +11,7 @@ export const DataProvider = (props) => {
   const [inventory, setInventory] = useState([]);
   const [inventoryItems, setInventoryItems] = useState([]);
   const [productMix, setProductMix] = useState([]);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -38,6 +39,9 @@ export const DataProvider = (props) => {
 
       const productMixResponse = await axios.get("/api/product_mix");
       setProductMix(productMixResponse.data);
+
+      const userResponse = await axios.get("/api/user");
+      setUser(userResponse.data);
     } catch (err) {
       console.log(err);
     }
@@ -60,6 +64,8 @@ export const DataProvider = (props) => {
         setInventoryItems,
         productMix: productMix || [],
         setProductMix,
+        user: user || [],
+        setUser,
       }}
     >
       {props.children}

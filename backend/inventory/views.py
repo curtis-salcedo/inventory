@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import viewsets, status
@@ -78,23 +79,17 @@ def create_inventory(request):
         month=request.data['month'],
         year=request.data['year'],
         name=request.data['name'],
-
     )
     new_inventory.save()
 
-    print("New inventory created called:", new_inventory, 'Amount of item list', new_inventory.item_list , new_inventory.inventory_id)
+    print(f"New inventory created with the name of {new_inventory.name} and the id of: {new_inventory.inventory_id}")
     # Automatically create items based on the list of products and push into the inventory under item_list
     items = auto_create_inventory_list(new_inventory.inventory_id)
-
-    print(items)
-
     for item in items:
         print(item)
-        new_inventory.item_list.add(item.inventory_item_id)
+        new_inventory.item_list.add(item)
         new_inventory.save()
-
     print("New inventory item list:", new_inventory.item_list)
-    
     return Response(status=status.HTTP_201_CREATED)
 
 def auto_create_inventory_list(inventory_id):
@@ -111,10 +106,9 @@ def auto_create_inventory_list(inventory_id):
             total=0.0,
             price=product.price
         )
-        inventory_item.add(items)
-        print("Inventory item created:", inventory_item)
-        print(items)
-    return 
+        items.append(inventory_item)
+        print(f"The following inventory items were created: {items}")
+    return items
 
 
 @api_view(['POST'])
@@ -199,3 +193,49 @@ def find_inventory_item(request):
 def create_inventory_sheet(request):
     print("Request data:", request.data)
     return Response(status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def get_inventory_items(request):
+    inventory_id = request.GET.get('inventory_id')
+    inventory_items = Inventory.objects.get(inventory_id=inventory_id).item_list.all()
+    active_inventory_items = []
+    for item in inventory_items:
+        inventory_item_id = item.inventory_item_id
+        name = item.product.name
+        category = item.category.name
+        count_by = item.product.count_by
+        quantity = item.quantity
+        total = item.total
+        price = item.price
+        active_inventory_items.append({
+            'inventory_item_id': inventory_item_id,
+            'name': name,
+            'category': category,
+            'count_by': count_by,
+            'quantity': quantity,
+            'total': total,
+            'price': price,
+        })
+    return JsonResponse(active_inventory_items, status=status.HTTP_200_OK, safe=False)
+
+@api_view(['PUT'])
+def update_inventory_sheet(request, id):
+    print("Request data:", request.data)
+    print("Request id:", id)
+    return Response(status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def get_item_detail(request, id):
+    print("Request id:", id)
+    inventory_item = InventoryItem.objects.get(inventory_item_id=id)
+    inventory_item = {
+        'inventory_item_id': inventory_item.inventory_item_id,
+        'name': inventory_item.product.name,
+        'category': inventory_item.category.name,
+        'count_by': inventory_item.product.count_by,
+        'quantity': inventory_item.quantity,
+        'total': inventory_item.total,
+        'price': inventory_item.price,
+    }
+
+    return JsonResponse(inventory_item, status=status.HTTP_200_OK, safe=False)

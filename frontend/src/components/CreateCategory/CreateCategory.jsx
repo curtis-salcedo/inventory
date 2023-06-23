@@ -7,45 +7,6 @@ import axios from 'axios';
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.xsrfCookieName = "csrftoken";
 
-
-const businessItems = [
-  {
-    id: 1,
-    name: 'Business 1',
-    address: 'Address 1',
-    phone_number: 'Phone Number 1',
-    email: 'Email 1',
-  },
-  {
-    id: 2,
-    name: 'Business 2',
-    address: 'Address 2',
-    phone_number: 'Phone Number 2',
-    email: 'Email 2',
-  },
-]
-
-const categoryItems = [
-  {
-    id: 1,
-    name: 'Category 1',
-    description: 'Description 1',
-    business: {
-      id: 1,
-      name: 'Business 1',
-    },
-  },
-  {
-    id: 2,
-    name: 'Category 2',
-    description: 'Description 2',
-    business: {
-      id: 1,
-      name: 'Business 2',
-    },
-  },
-]
-
 class CreateCategory extends Component {
   constructor(props) {
     super(props);

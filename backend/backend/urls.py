@@ -20,7 +20,7 @@ from rest_framework import routers
 from inventory import views
 
 router = routers.DefaultRouter()
-router.register('User', views.CustomUserView)
+router.register('user', views.CustomUserView)
 router.register('business', views.BusinessView)
 router.register('location', views.LocationView)
 router.register('category', views.CategoryView)
@@ -45,5 +45,8 @@ urlpatterns = [
 
     # Inventory Item URLs
     path('api/find_inventory_item/', views.find_inventory_item, name='find_inventory_item'),
+    path('api/get_inventory_items/', views.get_inventory_items, name='get_inventory_items'),
+    path('api/update_inventory_sheet/<int:id>', views.update_inventory_sheet, name='update_inventory_sheet'),
+    path('api/get_item_detail/<int:id>', views.get_item_detail, name='get_item_detail'),
 ]
 
