@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 
 // Data Imports
+import { DataContext } from '../../utilities/DataContext';
 
 // Component Imports
+import ProductModal from './ProductModal'
 import AddProductModal from '../AddProduct/AddProductModal';
 
 // Styling Imports
@@ -12,46 +14,75 @@ import {
   Button,
 } from 'reactstrap';
 
-export default class ProductTable extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      products: [],
-    };
-  }
-  
-  componentDidMount = () => {
-    this.fetchProducts();
-  }
+export default function ProductTable() {
+  const [products, setProducts] = useState([]);
+  const [activeProduct, setActiveProduct] = useState(null);
+  const [showProductModal, setShowProductModal] = useState(false);
+  const [showAddProductModal, setShowAddProductModal] = useState(false);
 
-  fetchProducts = () => {
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = () => {
     axios
-      .get('api/get_products')
+      .get('/api/get_products/')
       .then((res) => {
-        console.log(res.data);
-        this.setState({
-          products: res.data,
-        });
+        console.log(res.data)
+        setProducts(res.data)
       })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
+      .catch((err) => console.log(err));
+  };
 
-  editProduct = (product) => {
+  const showProductDetails = (e, product) => {
+    console.log(product)
+    handleProductModal(product);
+    setShowProductModal(!showProductModal);
+  };
 
-  }
+  
+  const handleProductModal = (product) => {
+    setActiveProduct(product);
+    setShowProductModal(!showProductModal);
+  };
 
-  render() {
-    const { toggle, onSave } = this.props;
-    const { products } = this.state;
+  const handleAddProductModal = (product) => {
+    setActiveProduct(product);
+    setShowAddProductModal(!showAddProductModal);
+  };
 
-    return (
-      <Table size="sm">
+  const handleSubmit = (product) => {
+
+  };
+
+  const handleSort = (column) => {
+    console.log(column)
+  };
+
+  const handleCreateProduct = () => {
+    const newProduct = {
+      product_id: '',
+      product_number: '',
+      name: '',
+      category: '',
+      sub_category: '',
+      price: '',
+      case_size: '',
+      count_by: '',
+      description: '',
+    }
+    setActiveProduct(newProduct);
+    setShowAddProductModal(!showAddProductModal);
+  };
+    
+  return (
+    <>
+      <Button color="primary" size="lg" onClick={handleCreateProduct}>Add Product</Button>
+      <Table hover striped size="sm">
         <thead>
           <tr>
             <th>#</th>
-            <th>Name</th>
+            <th onClick={() => handleSort('name')} >Name</th>
             <th>Category</th>
             <th>Sub-Category</th>
             <th>Price</th>
@@ -61,9 +92,9 @@ export default class ProductTable extends Component {
           </tr>
         </thead>
         <tbody>
-            { products ? products.map((p) => {
-              return (
-              <tr key={p.product_id}>
+          {products ? (
+            products.map((p) => (
+              <tr scope="row" key={p.product_id}>
                 <td>{p.product_number}</td>
                 <td>{p.name}</td>
                 <td>{p.category}</td>
@@ -72,16 +103,33 @@ export default class ProductTable extends Component {
                 <td>{p.case_size}</td>
                 <td>{p.count_by}</td>
                 <td>
-                  <Button
-                    onClick={() => this.editProduct(p)}
-                    size="sm"
-                  >Edit</Button>
+                  <Button onClick={(e) => showProductDetails(e, p)} size="sm" color="primary">
+                    Details
+                  </Button>
                 </td>
               </tr>
-              )
-            }) : null }
+            ))
+          ) : (
+            <tr>
+              <td colSpan={8}>No products found.</td>
+            </tr>
+          )}
         </tbody>
       </Table>
-    );
-  }
-}
+      {showProductModal && (
+        <ProductModal
+          activeProduct={activeProduct}
+          toggle={handleProductModal}
+          onSave={handleSubmit}
+        />
+      )}
+      {showAddProductModal && (
+        <AddProductModal
+          activeItem={activeProduct}
+          toggle={handleAddProductModal}
+          onSave={handleSubmit}
+        />
+      )}
+    </>
+  );
+};

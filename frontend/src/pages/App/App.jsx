@@ -11,8 +11,6 @@ import BusinessPage from "../BusinessPage/BusinessPage";
 // Component Imports
 import NavBar from "../../components/NavBar/NavBar";
 
-import Apps from "./Apps";
-
 export default function App() {
   const [user, setUser] = useState();
 

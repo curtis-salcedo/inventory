@@ -109,7 +109,7 @@ export default function Category() {
           <Col md={6}>
             { categoryList && (
               categoryList.map((c) => (
-              <Card>
+              <Card key={c.category_id}>
                 <CardBody>
                   <CardTitle tag="h5">{c.name}</CardTitle>
                   <CardSubtitle tag="h6" className="mb-2 text-muted">{c.description}</CardSubtitle>

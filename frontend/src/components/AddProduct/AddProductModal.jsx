@@ -24,6 +24,7 @@ export default class AddProductModal extends Component {
 
   componentDidMount = () => {
     this.fetchCategories();
+    this.fetchSubCategories();
   };
 
   fetchCategories = () => {
@@ -32,6 +33,16 @@ export default class AddProductModal extends Component {
       .then((res) => {
         console.log(res.data)
         this.setState({ categories: res.data });
+      })
+      .catch((err) => console.log(err));
+  };
+
+  fetchSubCategories = () => {
+    axios
+      .get("/api/sub_category/")
+      .then((res) => {
+        console.log('sub_category data', res.data)
+        this.setState({ sub_categories: res.data });
       })
       .catch((err) => console.log(err));
   };
@@ -47,7 +58,7 @@ export default class AddProductModal extends Component {
 
   render() {
     const { toggle, onSave } = this.props;
-    const { categories } = this.state;
+    const { categories, sub_categories } = this.state;
 
     return (
       <Modal isOpen={true} toggle={toggle}>
@@ -71,9 +82,9 @@ export default class AddProductModal extends Component {
             <Label for="product-category">Product Sub-Category</Label>
             <Input type="select" id="sub_category" name="sub_category" onChange={this.handleChange} >
             <option value="">Select Category</option>
-            {categories && categories.map((c) => {
+            {sub_categories && sub_categories.map((s) => {
               return (
-                <option value={c.category.sub_category} key={c.category_id}>{c.name}</option>
+                <option value={s.sub_category} key={s.sub_category_id}>{s.name}</option>
               )
             })}
             </Input>

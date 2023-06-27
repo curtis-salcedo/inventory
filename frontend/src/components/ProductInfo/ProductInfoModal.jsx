@@ -29,7 +29,6 @@ export default class ProductInfoModal extends Component {
     console.log(e.target)
     const activeItem = { ...this.state.activeItem, [name]: value };
     console.log(activeItem)
-    
     this.setState({ activeItem });
   };
 

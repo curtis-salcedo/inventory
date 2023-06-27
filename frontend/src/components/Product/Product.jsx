@@ -17,8 +17,12 @@ export default function Product() {
 
 
   return ( 
+    <main>
+
     <ProductTable
       products={products}
-    />
+      />
+
+      </main>
   )
 }

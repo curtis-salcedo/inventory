@@ -14,6 +14,7 @@ export default function InventoryCountPage() {
   const [activeItem, setActiveItem] = useState({
     name: "",
     category: "",
+    sub_category: "",
     quantity: "",
     price: "",
     description: "",
@@ -58,6 +59,7 @@ export default function InventoryCountPage() {
   const createProduct = () => {
     const product = {
       category: "",
+      sub_category: "",
       name: "",
       description: "" ,
       product_number: "",
@@ -144,6 +146,7 @@ export default function InventoryCountPage() {
           <tr>
             <th>Name</th>
             <th>Category</th>
+            <th>Sub Category</th>
             <th>Description</th>
             <th>Product Number</th>
             <th>Vendor</th>
@@ -158,6 +161,7 @@ export default function InventoryCountPage() {
             <tr key={p.product_id}>
               <td>{p.name}</td>
               <td>{p.category}</td>
+              <td>{p.sub_category}</td>
               <td>{p.description}</td>
               <td>{p.product_number}</td>
               <td>{p.vendor}</td>
