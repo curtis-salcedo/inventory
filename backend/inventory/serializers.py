@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomUser, Business, Location, Category, Product, InventoryItem, Inventory, ProductMixTemplate
+from .models import CustomUser, Business, Location, Category, Product, InventoryItem, Inventory, ProductMixTemplate, SubCategory
 
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,7 +24,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ('product_id', 'category', 'name', 'description', 'product_number', 'description', 'price', 'case_size', 'count_by')
+        fields = ('product_id', 'category', 'name', 'description', 'product_number', 'description', 'price', 'case_size', 'count_by', 'sub_category')
 
 class InventoryItemSerializer(serializers.ModelSerializer):
     class Meta:
@@ -40,3 +40,8 @@ class ProductMixTemplateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductMixTemplate
         fields = ('product_mix_template_id', 'location_id', 'name', 'description', 'item_list')
+
+class SubCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SubCategory
+        fields = ('sub_category_id', 'category', 'name')

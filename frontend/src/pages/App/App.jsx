@@ -21,10 +21,6 @@ export default function App() {
   return (
     <main className="App">
       <NavBar user={user} setUser={setUser} />
-
-      {/* THIS IS THE OLD APPS.JS FILE AS A PLACEHOLDER */}
-        <Apps />
-      
       <Routes>
         {/* Route components in here */}
         <Route path="/" element={<LandingPage />} />

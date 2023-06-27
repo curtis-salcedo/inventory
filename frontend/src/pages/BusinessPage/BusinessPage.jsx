@@ -5,9 +5,9 @@ import axios from 'axios';
 import { DataContext } from '../../utilities/DataContext';
 
 // Component Imports
-import CreateProductMixModal from '../../components/ProductMix/CreateProductMixModal';
-import ProductMix from '../../components/ProductMix/ProductMix';
-import InventorySheet from '../../components/InventorySheet/InventorySheet';
+import Category from '../../components/Category/Category';
+import Product from '../../components/Product/Product';
+import Location from '../../components/Location/Location';
 
 // Styling Imports
 
@@ -17,61 +17,29 @@ axios.defaults.xsrfCookieName = "csrftoken";
 
 
 export default function BusinessPage() {
-  const [showModal, setShowModal] = useState(false);
-  const [activeLocation, setActiveLocation] = useState('');
-  const [showMix, setShowMix] = useState(false);
-  
   // Data Imports
-  const { locations, business } = useContext(DataContext);
-
-
-  const toggle = () => {
-    setShowModal(!showModal);
-  }
-
-  const toggleMix = (e) => {
-    setShowMix(!showMix);
-  }
-
-  const handleSubmit = (mix) => {
-
-  };
+  const { business } = useContext(DataContext);
 
   useEffect(() => {
 
-  }, []);
-
+  }, [business]);
 
   return (
     <main>
-      <div>
-        <button onClick={toggle}>Create Product Mix</button>
-        { showModal ? <CreateProductMixModal toggle={toggle} locations={locations}
-        onSave={handleSubmit}/> : null
-        }
-      </div>
-      <div>
-        <div>Here is the easy to use inventory sheet</div>
-        <InventorySheet activeLocation={activeLocation} setActiveLocation={setActiveLocation} />
-      </div>
-      {/* <div>Here is Business Info</div> */}
-      <div>
-        {/* <div>Business:
-          {business.map((b) => (
-            <div key={b.business_id}>
-              <div> {b.name}</div>
-            </div>
-            ))}
-        </div> */}
-      </div>
-      <div>
-        {/* <div>Locations:</div>
-        { locations ? 
-          locations.map((l) => (
-            <div key={l.id}> {l.name}</div>
-          ))
-        : null} */}
-      </div>
+
+      <div>Business Name: {business.name}</div>
+
+      <div>Manage Locations</div>
+      <Location />
+
+      <div>Manage Products</div>
+      <Product />
+
+      <div>Manage Category</div>
+      <Category />
+
+
+      
     </main>
   );
 };

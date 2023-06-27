@@ -12,6 +12,7 @@ export const DataProvider = (props) => {
   const [inventoryItems, setInventoryItems] = useState([]);
   const [productMix, setProductMix] = useState([]);
   const [user, setUser] = useState(null);
+  const [subCategory, setSubCategory] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -42,6 +43,9 @@ export const DataProvider = (props) => {
 
       const userResponse = await axios.get("/api/user");
       setUser(userResponse.data);
+
+      const subCategoryResponse = await axios.get("/api/sub_category");
+      setSubCategory(subCategoryResponse.data);
     } catch (err) {
       console.log(err);
     }
@@ -52,7 +56,7 @@ export const DataProvider = (props) => {
       value={{
         locations: locations || [],
         setLocations,
-        businesses: business || [],
+        business: business || [],
         setBusiness,
         category: category || [],
         setCategory,
@@ -66,6 +70,8 @@ export const DataProvider = (props) => {
         setProductMix,
         user: user || [],
         setUser,
+        subCategory: subCategory || [],
+        setSubCategory,
       }}
     >
       {props.children}

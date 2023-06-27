@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser, Business, Location, Category, Product, InventoryItem, Inventory, ProductMixTemplate
+from .models import CustomUser, Business, Location, Category, Product, InventoryItem, Inventory, ProductMixTemplate, SubCategory, InventorySubmission
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 
 class CustomUserAdmin(UserAdmin):
@@ -37,16 +37,22 @@ class CategoryAdmin(admin.ModelAdmin):
     list = ('name', 'description', 'business')
 
 class ProductAdmin(admin.ModelAdmin):
-    list = ('name', 'description', 'product_number', 'category')
+    list = ('name', 'description', 'product_number', 'category', 'sub_category', 'price', 'case_size', 'count_by')
 
 class InventoryItemAdmin(admin.ModelAdmin):
-    list = ('id', 'inventory', 'product', 'qauntity')
+    list = ('inventory', 'product', 'qauntity', 'total', 'price')
 
 class InventoryAdmin(admin.ModelAdmin):
     list = ('location', 'product', 'quantity', 'total', 'created_at', 'updated_at')
 
 class ProductMixTemplateAdmin(admin.ModelAdmin):
     list = ('business', 'name', 'created_at', 'updated_at', 'description', 'item_list')
+
+class SubCategoryAdmin(admin.ModelAdmin):
+    list = ('name', 'category')
+
+class InventorySubmissionAdmin(admin.ModelAdmin):
+    list = ('inventory', 'submitted_by', 'submitted_at', 'category_totals')
 
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Business, BusinessAdmin)
@@ -56,4 +62,5 @@ admin.site.register(Product, ProductAdmin)
 admin.site.register(InventoryItem, InventoryItemAdmin)
 admin.site.register(Inventory, InventoryAdmin)
 admin.site.register(ProductMixTemplate, ProductMixTemplateAdmin)
+admin.site.register(SubCategory, SubCategoryAdmin)
 

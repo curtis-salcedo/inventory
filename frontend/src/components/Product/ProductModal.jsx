@@ -14,11 +14,11 @@ import {
   Label,
 } from "reactstrap";
 
-export default class AddProductModal extends Component {
+export default class ProductModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeItem: this.props.activeItem,
+      activeItem: [],
     };
   }
 
@@ -67,17 +67,17 @@ export default class AddProductModal extends Component {
             </Input>
           </FormGroup>
 
-          <FormGroup>
-            <Label for="product-category">Product Sub-Category</Label>
-            <Input type="select" id="sub_category" name="sub_category" onChange={this.handleChange} >
+          {/* <FormGroup>
+            <Label for="product-sub-category">Product Sub-Category</Label>
+            <Input type="select" id="subCategory" name="subCategory" onChange={this.handleChange} >
             <option value="">Select Category</option>
-            {categories && categories.map((c) => {
+            { subCategories && subCategories.map((s) => {
               return (
-                <option value={c.category.sub_category} key={c.category_id}>{c.name}</option>
+                <option value={s.name} key={s.sub_category_id}>{s.name}</option>
               )
             })}
             </Input>
-          </FormGroup>
+          </FormGroup> */}
     
           <FormGroup>
             <Label for="product-name">Product Name</Label>

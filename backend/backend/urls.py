@@ -28,6 +28,7 @@ router.register('products', views.ProductView)
 router.register('inventory_items', views.InventoryItemView)
 router.register('inventory', views.InventoryView)
 router.register('product_mix', views.ProductMixTemplateView)
+router.register('sub_category', views.SubCategoryView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -48,5 +49,9 @@ urlpatterns = [
     path('api/get_inventory_items/', views.get_inventory_items, name='get_inventory_items'),
     path('api/update_inventory_sheet/<int:id>', views.update_inventory_sheet, name='update_inventory_sheet'),
     path('api/get_item_detail/<int:id>', views.get_item_detail, name='get_item_detail'),
+
+    # Products URLs
+    path('api/get_products/', views.get_products, name='get_products'),
+
 ]
 

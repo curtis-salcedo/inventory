@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import viewsets, status
 from django.utils import timezone
-from .serializers import CustomUserSerializer, BusinessSerializer, LocationSerializer, CategorySerializer, ProductSerializer, InventoryItemSerializer, InventorySerializer, ProductMixTemplateSerializer
+from .serializers import CustomUserSerializer, BusinessSerializer, LocationSerializer, CategorySerializer, ProductSerializer, InventoryItemSerializer, InventorySerializer, ProductMixTemplateSerializer, SubCategorySerializer
 from .models import CustomUser, Business, Location, Category, Product, InventoryItem, Inventory, ProductMixTemplate
 from django.core import serializers
 import json
@@ -44,21 +44,9 @@ class ProductMixTemplateView(viewsets.ModelViewSet):
     serializer_class = ProductMixTemplateSerializer
     queryset = ProductMixTemplate.objects.all()
 
-# @api_view(['POST'])
-# def create_inventory(request):
-#     request.data['created_at'] = timezone.now()
-#     request.data['month'] = timezone.now().month
-#     request.data['year'] = timezone.now().year
-#     # Run serializer validation
-#     serializer = InventorySerializer(data=request.data)
-#     if serializer.is_valid():
-#         serializer.save()
-#         # Print the saved serializer data for debugging purposes
-#         print("Saved serializer data:", serializer.data)  
-#         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    
-#     print("Serializer errors:", serializer.errors)  # Print the serializer errors if the data is invalid
-#     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class SubCategoryView(viewsets.ModelViewSet):
+    serializer_class = SubCategorySerializer
+    queryset = ProductMixTemplate.objects.all()
 
 
 @api_view(['POST'])
@@ -66,13 +54,10 @@ def create_inventory(request):
     request.data['created_at'] = timezone.now()
     request.data['month'] = timezone.now().month
     request.data['year'] = timezone.now().year
-
     location_id = request.data['location']
     print('location', location_id)
-
     # find the location
     foundLocation = Location.objects.get(location_id=location_id)
-
     new_inventory = Inventory.objects.create(
         location=foundLocation,
         created_at=request.data['created_at'],
@@ -81,7 +66,6 @@ def create_inventory(request):
         name=request.data['name'],
     )
     new_inventory.save()
-
     print(f"New inventory created with the name of {new_inventory.name} and the id of: {new_inventory.inventory_id}")
     # Automatically create items based on the list of products and push into the inventory under item_list
     items = auto_create_inventory_list(new_inventory.inventory_id)
@@ -173,26 +157,24 @@ def get_product_mix_items(request):
 @api_view(['GET'])
 def find_inventory_item(request):
     # print("Request data:", request.GET.get('data[item_list][0]'))
-    
     item_list = []
-
     for key, value in request.GET.items():
         if key.startswith('inventoryItems[item_list]'):
             id = item_list.append(value)
-
     inventory_items = []
     for item in item_list:
         inventory_items.append(InventoryItem.objects.get(inventory_item_id=item))
-
     serialized_inventory_items = serializers.serialize('json', inventory_items)
     parsed_inventory_items = json.loads(serialized_inventory_items)
     print(parsed_inventory_items)
     return Response(parsed_inventory_items, status=status.HTTP_200_OK)
 
+
 @api_view(['POST'])
 def create_inventory_sheet(request):
     print("Request data:", request.data)
     return Response(status=status.HTTP_200_OK)
+
 
 @api_view(['GET'])
 def get_inventory_items(request):
@@ -218,11 +200,13 @@ def get_inventory_items(request):
         })
     return JsonResponse(active_inventory_items, status=status.HTTP_200_OK, safe=False)
 
+
 @api_view(['PUT'])
 def update_inventory_sheet(request, id):
     print("Request data:", request.data)
     print("Request id:", id)
     return Response(status=status.HTTP_200_OK)
+
 
 @api_view(['GET'])
 def get_item_detail(request, id):
@@ -237,5 +221,31 @@ def get_item_detail(request, id):
         'total': inventory_item.total,
         'price': inventory_item.price,
     }
-
     return JsonResponse(inventory_item, status=status.HTTP_200_OK, safe=False)
+
+@api_view(['GET'])
+def get_products(request):
+    print("Request data:", request)
+    products = Product.objects.all()
+    
+    product_list = []
+    for product in products:
+        product_id = product.product_id
+        product_number = product.product_number
+        name = product.name
+        category = product.category.name
+        sub_category = product.sub_category.name
+        count_by = product.count_by
+        case_size = product.case_size
+        price = product.price
+        product_list.append({
+            'product_id': product_id,
+            'product_number': product_number,
+            'name': name,
+            'category': category,
+            'sub_category': sub_category,
+            'count_by': count_by,
+            'case_size': case_size,
+            'price': price,
+        })
+    return JsonResponse(product_list, status=status.HTTP_200_OK, safe=False)

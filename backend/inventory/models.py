@@ -41,7 +41,6 @@ class Location(models.Model):
     def __str__(self):
         return self.name
 
-
 # Category Model
 class Category(models.Model):
     category_id = models.AutoField(primary_key=True)
@@ -52,11 +51,20 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+# SubCategory Model
+class SubCategory(models.Model):
+    sub_category_id = models.AutoField(primary_key=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='subcategories')
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
 
 # Product Model
 class Product(models.Model):
     product_id = models.AutoField(primary_key=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
+    sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name='products', null=True)
     name = models.CharField(max_length=100, unique=True)
     description = models.CharField(max_length=500, null=True)
     product_number = models.CharField(max_length=100)
@@ -65,6 +73,7 @@ class Product(models.Model):
     price = models.FloatField()
     case_size = models.IntegerField(null=True)
     count_by = models.CharField(max_length=100)
+    sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name='products', null=True)
 
     def __str__(self):
         return self.name
@@ -107,3 +116,14 @@ class Inventory(models.Model):
 
     def __str__(self):
         return self.name
+
+class InventorySubmission(models.Model):
+    submission_id = models.AutoField(primary_key=True)
+    submitted_by = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='inventorysubmissions')
+    inventory = models.ForeignKey(Inventory, on_delete=models.CASCADE, related_name='inventorysubmissions')
+    submitted_date = models.DateTimeField(auto_now_add=True, null=True)
+    updated_date = models.DateTimeField(auto_now=True, null=True)
+    category_totals = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+
+    def __str__(self):
+        return f"Submission by {self.submitted_by} for {self.inventory}"
