@@ -14,7 +14,7 @@ import {
   Label,
 } from "reactstrap";
 
-export default function CreateInventoryShell({ handleShowCreateInventoryShell }) {
+export default function CreateInventorySheet({ handleShowCreateInventoryShell }) {
   // Data from DataContext.js file
   const { locations, products, inventoryItems, inventory } = useContext(DataContext);
   // Lists used to populate data for the form
@@ -92,7 +92,7 @@ export default function CreateInventoryShell({ handleShowCreateInventoryShell })
   return (
     <main>
       <div>
-        <h1>Create Inventory Shell</h1>
+        <h1>Create Inventory Sheet</h1>
       </div>
       <Form>
         <FormGroup>

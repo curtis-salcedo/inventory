@@ -20,25 +20,24 @@ export default function NavBar() {
       <span className="NavBarTwo">Buddy</span>
     </div>
 
-<div className="NavBarLinks">
+  <div className="NavBarLinks">
 
-    <>
-      <div>
-        <Link to={'/'}>Home</Link>
-      </div>
-      <div>
-        <Link to={`/inventory`}>Count Inventory Page</Link>
-      </div>
-      <div>
-        <Link to={'/business'}>Business Page</Link>
-      </div>
-    </>
+      <>
+        <div>
+          <Link to={'/'}>Home</Link>
+        </div>
+        <div>
+          <Link to={`/inventory`}>Count Inventory Page</Link>
+        </div>
+        <div>
+          <Link to={'/business'}>Business Page</Link>
+        </div>
+      </>
 
-  <div>
-    <Link to="">Log Out</Link>
+    <div>
+      <Link to={'/login'}>Log Out</Link>
+    </div>
   </div>
-</div>
-
 </div>
   </nav>
   );

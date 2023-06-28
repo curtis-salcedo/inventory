@@ -1,16 +1,23 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
+from django.core import serializers
+from django.utils import timezone
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 from rest_framework.decorators import api_view
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import viewsets, status
-from django.utils import timezone
+
 from .serializers import CustomUserSerializer, BusinessSerializer, LocationSerializer, CategorySerializer, ProductSerializer, InventoryItemSerializer, InventorySerializer, ProductMixTemplateSerializer, SubCategorySerializer
+
 from .models import CustomUser, Business, Location, Category, Product, InventoryItem, Inventory, ProductMixTemplate, SubCategory
-from django.core import serializers
+
 import json, csv
 
-
 # Create your views here.
+
 
 class CustomUserView(viewsets.ModelViewSet):
     serializer_class = CustomUserSerializer
@@ -39,7 +46,7 @@ class InventoryItemView(viewsets.ModelViewSet):
 class InventoryView(viewsets.ModelViewSet):
     serializer_class = InventorySerializer
     queryset = Inventory.objects.all()
-    
+
 class ProductMixTemplateView(viewsets.ModelViewSet):
     serializer_class = ProductMixTemplateSerializer
     queryset = ProductMixTemplate.objects.all()
@@ -48,6 +55,12 @@ class SubCategoryView(viewsets.ModelViewSet):
     serializer_class = SubCategorySerializer
     queryset = SubCategory.objects.all()
 
+@api_view(['POST'])
+def login(request):
+    print("Request data:", request.data)
+    # user = CustomUser.objects.filter(email=request.data['email'])
+    # login(request, user)
+    return Response(status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def create_inventory(request):
@@ -288,6 +301,7 @@ def export_inventory(request):
         })
 
     export_inventory = {
+        'business': request_inventory.location.business.name,
         'name': request_inventory.name,
         'inventory_id': request_inventory.inventory_id,
         'location': request_inventory.location.name,
@@ -301,8 +315,14 @@ def export_inventory(request):
     print("Export inventory:", export_inventory)
 
     response = HttpResponse(content_type='text/csv')
-    
+
     response['Content-Disposition'] = f"attachment; filename='{request_inventory.name}.csv'"
+
+    # writer.writerow({
+    #     'Business Name': request_inventory.location.business.name,
+    #     'Location': request_inventory.location.name,
+    #     'Period': f"{request_inventory.month} / {request_inventory.year}",
+    #     })
 
     fieldnames = ['name', 'category', 'count_by', 'quantity', 'total', 'price']
 

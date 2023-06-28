@@ -34,8 +34,14 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+
+    # Authenication URLs
+    # path('api/register/', views.register, name='register'),
+    path('api/login/', views.login, name='login'),
+    # path('api/logout/', views.logout, name='logout'),
+
+    # Export URLs
     path('api/export_inventory/', views.export_inventory, name='export_inventory'),
-    
 
     # Inventory URLs
     path('api/create_inventory/', views.create_inventory, name='create_inventory'),
@@ -55,6 +61,5 @@ urlpatterns = [
     # Products URLs
     path('api/get_products/', views.get_products, name='get_products'),
     path('api/create_product/', views.create_product, name='create_product'),
-
 ]
 

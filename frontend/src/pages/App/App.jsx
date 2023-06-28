@@ -10,6 +10,8 @@ import BusinessPage from "../BusinessPage/BusinessPage";
 
 // Component Imports
 import NavBar from "../../components/NavBar/NavBar";
+import Login from "../../components/Login/Login";
+import Register from "../../components/Register/Register";
 
 export default function App() {
   const [user, setUser] = useState();
@@ -24,6 +26,8 @@ export default function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/inventory" element={<InventoryPage />} />
         <Route path="/business" element={<BusinessPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Login />} />
       </Routes>
     </main>
   );

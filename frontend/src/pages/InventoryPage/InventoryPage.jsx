@@ -5,7 +5,7 @@ import axios from 'axios';
 import { DataContext } from '../../utilities/DataContext';
 
 // Component Imports
-import CreateInventoryShell from '../../components/CreateInventoryShell/CreateInventoryShell';
+import CreateInventorySheet from '../../components/CreateInventorySheet/CreateInventorySheet';
 import InventorySheet from '../../components/InventorySheet/InventorySheet';
 
 // Styling Imports
@@ -18,12 +18,12 @@ axios.defaults.xsrfCookieName = "csrftoken";
 export default function InventoryCountPage() {
   
   // Show Component Handles
-  const [showCreateInventoryShell, setShowCreateInventoryShell] = useState(false);
+  const [showCreateInventorySheet, setShowCreateInventorySheet] = useState(false);
   const [showInventory, setShowInventory] = useState(false);
   const [activeInventoryId, setActiveInventoryId] = useState([])
 
   // Data Imports
-  const { business, inventory, products, category } = useContext(DataContext);
+  const { inventory } = useContext(DataContext);
 
   const handleInventorySubmit = (inventory) => {
     if (inventory.inventory_id) {
@@ -37,8 +37,8 @@ export default function InventoryCountPage() {
       .then((res) => console.log(res.data));
   };
 
-  const handleShowCreateInventoryShell = () => {
-    setShowCreateInventoryShell(!showCreateInventoryShell);
+  const handleShowCreateInventorySheet = () => {
+    setShowCreateInventorySheet(!showCreateInventorySheet);
   }
 
   const handleShowInventory = () => {
@@ -70,15 +70,15 @@ export default function InventoryCountPage() {
         )}
       </div>
 
-      <button onClick={() => handleShowCreateInventoryShell()}>CreateInventoryShell
+      <button onClick={() => handleShowCreateInventorySheet()}>Create Inventory Sheet
       </button>
 
       <button onClick={() => handleInventorySubmit()}>Test Submit (Don't Use) </button>
 
       <div>
-        { showCreateInventoryShell ? (
-          <CreateInventoryShell
-          handleShowCreateInventoryShell={handleShowCreateInventoryShell} />
+        { showCreateInventorySheet ? (
+          <CreateInventorySheet
+          handleShowCreateInventoryShell={handleShowCreateInventorySheet} />
           ) : ( null
         )}
       </div>

@@ -98,7 +98,6 @@ export default function InventorySheet({ activeInventoryId }) {
 
   return (
     <div>
-      <h1>Inventory Shell</h1>
       <button
         onClick={(e) => handleSubmit(e)}
       >Submit</button>

@@ -42,6 +42,7 @@ export const DataProvider = (props) => {
       setProductMix(productMixResponse.data);
 
       const userResponse = await axios.get("/api/user");
+      console.log(user)
       setUser(userResponse.data);
 
       const subCategoryResponse = await axios.get("/api/sub_category");

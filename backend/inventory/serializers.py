@@ -1,10 +1,18 @@
-from rest_framework import serializers
+from rest_framework import serializers, permissions
 from .models import CustomUser, Business, Location, Category, Product, InventoryItem, Inventory, ProductMixTemplate, SubCategory
+from django.contrib.auth.hashers import make_password
 
 class CustomUserSerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        password = validated_data.pop('password', None)
+        if password:
+            validated_data['password'] = make_password(password)
+        
+        return super().create(validated_data)
+    
     class Meta:
         model = CustomUser
-        fields = ('email',)
+        fields = ('email', 'password', 'business')
 
 class BusinessSerializer(serializers.ModelSerializer):
     class Meta:
@@ -23,6 +31,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
+        permission_classees = [permissions.IsAuthenticated]
         model = Product
         fields = ('product_id', 'category', 'name', 'description', 'product_number', 'description', 'price', 'case_size', 'count_by', 'sub_category')
 
