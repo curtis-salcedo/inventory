@@ -19,18 +19,28 @@ export default function ProductTable() {
   const [activeProduct, setActiveProduct] = useState(null);
   const [showProductModal, setShowProductModal] = useState(false);
   const [showAddProductModal, setShowAddProductModal] = useState(false);
+  // Sort State
+  const [sortedColumn, setSortedColumn] = useState(null);
+  const [sortOrder, setSortOrder] = useState('asc');
 
   useEffect(() => {
     fetchProducts();
   }, []);
 
+  const refreshList = () => {
+    axios
+      .get("/api/products/")
+      .catch((err) => console.log(err));
+  };
+
+  const toggle = () => {
+    setShowAddProductModal(!showAddProductModal);
+  };
+
   const fetchProducts = () => {
     axios
       .get('/api/get_products/')
-      .then((res) => {
-        console.log(res.data)
-        setProducts(res.data)
-      })
+      .then((res) => { setProducts(res.data) })
       .catch((err) => console.log(err));
   };
 
@@ -40,7 +50,6 @@ export default function ProductTable() {
     setShowProductModal(!showProductModal);
   };
 
-  
   const handleProductModal = (product) => {
     setActiveProduct(product);
     setShowProductModal(!showProductModal);
@@ -52,12 +61,37 @@ export default function ProductTable() {
   };
 
   const handleSubmit = (product) => {
-
+    toggle();
+    if (product.product_id) {
+      axios
+        .put(`/api/products/${product.product_id}/`, product)
+        .then((res) => refreshList());
+      return;
+    }
+    axios
+      .post("/api/create_product/", product)
+      .then((res) => refreshList());
   };
 
   const handleSort = (column) => {
     console.log(column)
+    if (sortedColumn === column) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortedColumn(column);
+      setSortOrder('asc');
+    }
   };
+
+  const sortedProducts = products.sort((a, b) => {
+    if (a[sortedColumn] < b[sortedColumn]) {
+      return sortOrder === 'asc' ? -1 : 1;
+    }
+    if (a[sortedColumn] > b[sortedColumn]) {
+      return sortOrder === 'asc' ? 1 : -1;
+    }
+    return 0;
+  });
 
   const handleCreateProduct = () => {
     const newProduct = {
@@ -73,6 +107,7 @@ export default function ProductTable() {
     }
     setActiveProduct(newProduct);
     setShowAddProductModal(!showAddProductModal);
+    refreshList();
   };
     
   return (
@@ -82,12 +117,12 @@ export default function ProductTable() {
         <thead>
           <tr>
             <th>#</th>
-            <th onClick={() => handleSort('name')} >Name</th>
-            <th>Category</th>
-            <th>Sub-Category</th>
-            <th>Price</th>
-            <th>Case Size</th>
-            <th>Count By</th>
+            <th onClick={() => handleSort('name')}>Name</th>
+            <th onClick={() => handleSort('category')}>Category</th>
+            <th onClick={() => handleSort('sub_category')}>Sub-Category</th>
+            <th onClick={() => handleSort('price')}>Price</th>
+            <th onClick={() => handleSort('case_size')}>Case Size</th>
+            <th onClick={() => handleSort('count_by')}>Count By</th>
             <th></th>
           </tr>
         </thead>

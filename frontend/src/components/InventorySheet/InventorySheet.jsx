@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import axios from "axios";
 // Data Imports
 import { DataContext } from '../../utilities/DataContext';
+import { exportToCSV } from '../../utilities/exportData';
 // Component Imports
 import ItemDetail from '../ItemDetail/ItemDetail';
 
@@ -101,6 +102,9 @@ export default function InventorySheet({ activeInventoryId }) {
       <button
         onClick={(e) => handleSubmit(e)}
       >Submit</button>
+      <button
+        onClick={(e) => exportToCSV(e, activeInventoryId)}
+      >Export to CSV</button>
       <div>
         
       </div>

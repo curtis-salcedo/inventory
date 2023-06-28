@@ -24,7 +24,7 @@ export default class AddProductModal extends Component {
 
   componentDidMount = () => {
     this.fetchCategories();
-    this.fetchSubCategories();
+    // this.fetchSubCategories();
   };
 
   fetchCategories = () => {
@@ -35,17 +35,26 @@ export default class AddProductModal extends Component {
         this.setState({ categories: res.data });
       })
       .catch((err) => console.log(err));
-  };
-
-  fetchSubCategories = () => {
     axios
       .get("/api/sub_category/")
       .then((res) => {
-        console.log('sub_category data', res.data)
+        console.log(res.data)
         this.setState({ sub_categories: res.data });
-      })
+      }
+      )
       .catch((err) => console.log(err));
+
   };
+
+  // fetchSubCategories = () => {
+  //   axios
+  //     .get("/api/sub_category/")
+  //     .then((res) => {
+  //       console.log('sub_category data', res.data)
+  //       this.setState({ sub_categories: res.data });
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
 
   handleChange = (e) => {
     let { name, value } = e.target;

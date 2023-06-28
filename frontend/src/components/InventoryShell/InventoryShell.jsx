@@ -128,7 +128,7 @@ export default function InventoryShell({ activeInventory, setActiveInventory }) 
         <table>
           <thead>
             <tr>
-              <th>Name</th>
+              <th>Names</th>
               <th>Category</th>
               <th>Price</th>
               <th>Count By</th>

@@ -1,13 +1,13 @@
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import viewsets, status
 from django.utils import timezone
 from .serializers import CustomUserSerializer, BusinessSerializer, LocationSerializer, CategorySerializer, ProductSerializer, InventoryItemSerializer, InventorySerializer, ProductMixTemplateSerializer, SubCategorySerializer
-from .models import CustomUser, Business, Location, Category, Product, InventoryItem, Inventory, ProductMixTemplate
+from .models import CustomUser, Business, Location, Category, Product, InventoryItem, Inventory, ProductMixTemplate, SubCategory
 from django.core import serializers
-import json
+import json, csv
 
 
 # Create your views here.
@@ -46,7 +46,7 @@ class ProductMixTemplateView(viewsets.ModelViewSet):
 
 class SubCategoryView(viewsets.ModelViewSet):
     serializer_class = SubCategorySerializer
-    queryset = ProductMixTemplate.objects.all()
+    queryset = SubCategory.objects.all()
 
 
 @api_view(['POST'])
@@ -249,3 +249,67 @@ def get_products(request):
             'price': price,
         })
     return JsonResponse(product_list, status=status.HTTP_200_OK, safe=False)
+
+
+@api_view(['POST'])
+def create_product(request):
+    print("Request data:", request.data)
+
+    sub_category = SubCategory.objects.get(name=request.data['sub_category'])
+
+    Product.objects.create(
+        category_id=request.data['category'],
+        name=request.data['name'],
+        description=request.data['description'],
+        product_number=request.data['product_number'],
+        price=request.data['price'],
+        case_size=request.data['case_size'],
+        count_by=request.data['count_by'],
+        sub_category=sub_category,
+    )
+
+    return Response(status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def export_inventory(request):
+    request_id = request.GET.get('inventoryId')
+    request_inventory = Inventory.objects.get(inventory_id=request_id)
+    request_items = request_inventory.item_list.all()
+
+    export_data = []
+    for item in request_items:
+        export_data.append({
+            'name': item.product.name,
+            'category': item.category.name,
+            'count_by': item.product.count_by,
+            'quantity': item.quantity,
+            'total': item.total,
+            'price': item.price,
+        })
+
+    export_inventory = {
+        'name': request_inventory.name,
+        'inventory_id': request_inventory.inventory_id,
+        'location': request_inventory.location.name,
+        'month': request_inventory.month,
+        'year': request_inventory.year,
+        'created_at': request_inventory.created_at,
+        'updated_at': request_inventory.updated_at,
+        'name': request_inventory.name,
+        'item_list': export_data,
+    }
+    print("Export inventory:", export_inventory)
+
+    response = HttpResponse(content_type='text/csv')
+    
+    response['Content-Disposition'] = f"attachment; filename='{request_inventory.name}.csv'"
+
+    fieldnames = ['name', 'category', 'count_by', 'quantity', 'total', 'price']
+
+    writer = csv.DictWriter(response, fieldnames=fieldnames)
+    writer.writeheader()
+    writer.writerows(export_data)
+
+    return response
+
+    # return JsonResponse(export_inventory, status=status.HTTP_200_OK, safe=False)
