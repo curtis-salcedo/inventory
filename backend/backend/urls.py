@@ -31,13 +31,25 @@ router.register('product_mix', views.ProductMixTemplateView)
 router.register('sub_category', views.SubCategoryView)
 
 urlpatterns = [
+    path('', views.home, name='home'),
     path('admin/', admin.site.urls),
+    path('accounts/', include('allauth.urls')),
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
+    # path('auth/google/callback/', views.google_auth_callback, name='google_auth_callback'),
+
+    # path('accounts/google/login/callback/', views.google_auth_callback, name='google_auth_callback'), 
+
+    path('accounts/google/login/request/', views.google_login_proxy, name='google_login_proxy'),
+    path('redirect/', views.redirect_view, name='redirect'),
+
     # Authenication URLs
-    # path('api/register/', views.register, name='register'),
-    path('api/login/', views.login, name='login'),
+    path('api/signup/', views.signup, name='signup'),
+    path('api/login/', views.user_login, name='user_login'),
+    path('api/logout/', views.user_logout, name='user_logout'),
+    path('api/get_user/', views.get_user, name='get_user'),
+
     # path('api/logout/', views.logout, name='logout'),
 
     # Export URLs

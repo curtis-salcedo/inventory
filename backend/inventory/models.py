@@ -5,27 +5,30 @@ from django.utils import timezone
 
 from .managers import CustomUserManager
 
+# Oauth2 Model
+class OAuthApplication(models.Model):
+    name = models.CharField(max_length=255)
+    client_id = models.CharField(max_length=255)
+    client_secret = models.CharField(max_length=255)
+    # Add any other fields you need for your application
+
+    def __str__(self):
+        return self.name
+
 # CustomUser Model
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(max_length=255, unique=True)
-    name = models.CharField(max_length=100)
+    email = models.EmailField(unique=True)
+    name = models.CharField(max_length=255, null=True)
     is_staff = models.BooleanField(default=False)
-    is_manager = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
-    business = models.ForeignKey('Business', on_delete=models.CASCADE, related_name='users', null=True)
+    password = models.CharField(max_length=128, blank=True, null=True)
 
     objects = CustomUserManager()
 
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ['name']
-
-    def get_full_name(self):
-        return self.name
-    
-    def get_short_name(self):
-        return self.name
-
+    USERNAME_FIELD = 'email'
+    EMAIL_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
     def __str__(self):
         return self.email

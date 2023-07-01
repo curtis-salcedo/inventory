@@ -35,7 +35,7 @@ export default function NavBar() {
       </>
 
     <div>
-      <Link to={'/login'}>Log Out</Link>
+      <Link to={'/auth'}>Auth Page</Link>
     </div>
   </div>
 </div>

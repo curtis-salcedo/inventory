@@ -1,9 +1,12 @@
 from rest_framework import serializers, permissions
 from .models import CustomUser, Business, Location, Category, Product, InventoryItem, Inventory, ProductMixTemplate, SubCategory
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth import authenticate
 
 class CustomUserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(max_length=128, write_only=True)
     def create(self, validated_data):
+        print('create custom user serializer', validated_data)
         password = validated_data.pop('password', None)
         if password:
             validated_data['password'] = make_password(password)
@@ -12,7 +15,23 @@ class CustomUserSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = CustomUser
-        fields = ('email', 'password', 'business')
+        fields = ('email', 'password')
+
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField()
+
+    def validate(self, attrs):
+        email = attrs.get('email')
+        password = attrs.get('password')
+
+        user = authenticate(email=email, password=password)
+
+        if not user:
+            raise serializers.ValidationError("Invalid email or password.")
+
+        attrs['user'] = user
+        return attrs
 
 class BusinessSerializer(serializers.ModelSerializer):
     class Meta:

@@ -1,12 +1,15 @@
-from django.shortcuts import render
-from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render, redirect
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.core import serializers
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import authenticate, login, logout
+from django.views.decorators.csrf import csrf_exempt
+
+from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 
 from rest_framework.decorators import api_view
-from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import viewsets, status
 
@@ -15,10 +18,7 @@ from .serializers import CustomUserSerializer, BusinessSerializer, LocationSeria
 from .models import CustomUser, Business, Location, Category, Product, InventoryItem, Inventory, ProductMixTemplate, SubCategory
 
 import json, csv
-
 # Create your views here.
-
-
 class CustomUserView(viewsets.ModelViewSet):
     serializer_class = CustomUserSerializer
     queryset = CustomUser.objects.all()
@@ -55,12 +55,75 @@ class SubCategoryView(viewsets.ModelViewSet):
     serializer_class = SubCategorySerializer
     queryset = SubCategory.objects.all()
 
+def home(request):
+    return render(request, 'home.html')
+
+# Keeping this commented out for now to see if this can work at some point
+# The google_login_proxy is working for now
+# def google_auth_callback(request):
+#     print('Google Login Proxy request:', request)
+#     redirect_url = 'http://localhost:8000/accounts/google/login/' 
+#     # return JsonResponse({'redirect_url': redirect_url})
+#     return JsonResponse({'redirect_url': redirect_url}, status=status.HTTP_200_OK, safe=False)
+
+def google_login_proxy(request):
+    print('Google Login Proxy request:', request)
+    redirect_url = 'http://localhost:8000/accounts/google/login/' 
+    return JsonResponse({'redirect_url': redirect_url}, status=status.HTTP_200_OK, safe=False)
+
+def redirect_view(request):
+    print("Redirect request:", request)
+    redirect_url = 'http://localhost:3000/'
+    return HttpResponseRedirect(redirect_url)
+
 @api_view(['POST'])
-def login(request):
-    print("Request data:", request.data)
-    # user = CustomUser.objects.filter(email=request.data['email'])
-    # login(request, user)
-    return Response(status=status.HTTP_200_OK)
+def user_login(request):
+    email = request.data['email']
+    password = request.data['password']
+    user = authenticate(request, email=email, password=password)
+    business = user.business
+    print(business, token)
+    if user is not None:
+        login(request, user)
+        user_data = {
+            'email': user.email,
+            'name': user.name,
+            'business_id': user.business.business_id,
+            'business_name': user.business.name,
+        }
+        print(user_data)
+        return Response(user_data, status=status.HTTP_200_OK)
+    else:
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+@api_view(['GET'])
+def get_user(request):
+    print("Check User Request data:", request)
+    if request.user.is_authenticated:
+        user_data = {
+            'email': request.user.email,
+            'name': request.user.name,
+            # 'business_id': request.user.business.business_id,
+            # 'business_name': request.user.business.name,
+        }
+        print(user_data)
+        return JsonResponse(user_data, status=status.HTTP_200_OK)
+    else:
+        return Response({'detail': 'User is not authenticated.'})
+    
+@api_view(['POST'])
+def user_logout(request):
+    print("User Logout request:", request)
+    logout(request)
+    redirect_url = 'http://localhost:3000/'
+    return Response(redirect_url, status=status.HTTP_200_OK)
+
+def signup(request):
+    print('Sign Up Proxy request:', request)
+    redirect_url = 'http://localhost:8000/accounts/login/'
+    return JsonResponse({'redirect_url': redirect_url}, status=status.HTTP_200_OK, safe=False)
+
+
 
 @api_view(['POST'])
 def create_inventory(request):
@@ -267,9 +330,7 @@ def get_products(request):
 @api_view(['POST'])
 def create_product(request):
     print("Request data:", request.data)
-
     sub_category = SubCategory.objects.get(name=request.data['sub_category'])
-
     Product.objects.create(
         category_id=request.data['category'],
         name=request.data['name'],
@@ -280,7 +341,6 @@ def create_product(request):
         count_by=request.data['count_by'],
         sub_category=sub_category,
     )
-
     return Response(status=status.HTTP_200_OK)
 
 @api_view(['GET'])
@@ -288,7 +348,6 @@ def export_inventory(request):
     request_id = request.GET.get('inventoryId')
     request_inventory = Inventory.objects.get(inventory_id=request_id)
     request_items = request_inventory.item_list.all()
-
     export_data = []
     for item in request_items:
         export_data.append({
@@ -299,7 +358,6 @@ def export_inventory(request):
             'total': item.total,
             'price': item.price,
         })
-
     export_inventory = {
         'business': request_inventory.location.business.name,
         'name': request_inventory.name,
@@ -313,23 +371,16 @@ def export_inventory(request):
         'item_list': export_data,
     }
     print("Export inventory:", export_inventory)
-
     response = HttpResponse(content_type='text/csv')
-
     response['Content-Disposition'] = f"attachment; filename='{request_inventory.name}.csv'"
-
     # writer.writerow({
     #     'Business Name': request_inventory.location.business.name,
     #     'Location': request_inventory.location.name,
     #     'Period': f"{request_inventory.month} / {request_inventory.year}",
     #     })
-
     fieldnames = ['name', 'category', 'count_by', 'quantity', 'total', 'price']
-
     writer = csv.DictWriter(response, fieldnames=fieldnames)
     writer.writeheader()
     writer.writerows(export_data)
-
     return response
-
     # return JsonResponse(export_inventory, status=status.HTTP_200_OK, safe=False)
