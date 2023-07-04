@@ -66,6 +66,19 @@ def home(request):
 #     # return JsonResponse({'redirect_url': redirect_url})
 #     return JsonResponse({'redirect_url': redirect_url}, status=status.HTTP_200_OK, safe=False)
 
+import csv
+
+def test_import(request):
+    print("Test Import request:", request.method)
+    print("Test Import request data:", request.FILES)
+    uploaded_file = request.FILES['file']
+    wrapper = open(uploaded_file, 'r')
+    reader = csv.reader(wrapper)
+    for row in reader:
+        print(row)
+
+    return JsonResponse({'message': 'Test Import Successful'}, status=status.HTTP_200_OK, safe=False)
+
 def google_login_proxy(request):
     print('Google Login Proxy request:', request)
     redirect_url = 'http://localhost:8000/accounts/google/login/' 
@@ -82,7 +95,7 @@ def user_login(request):
     password = request.data['password']
     user = authenticate(request, email=email, password=password)
     business = user.business
-    print(business, token)
+    print(business)
     if user is not None:
         login(request, user)
         user_data = {
@@ -103,8 +116,7 @@ def get_user(request):
         user_data = {
             'email': request.user.email,
             'name': request.user.name,
-            # 'business_id': request.user.business.business_id,
-            # 'business_name': request.user.business.name,
+            'business': request.user.business.business_id,
         }
         print(user_data)
         return JsonResponse(user_data, status=status.HTTP_200_OK)

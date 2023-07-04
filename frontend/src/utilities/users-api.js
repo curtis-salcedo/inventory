@@ -5,7 +5,7 @@ export async function getUser() {
   try {
     const userResponse = await axios.get("/api/get_user");
     const loggedInUser = userResponse.data;
-    console.log(userResponse, loggedInUser)
+    // console.log(userResponse, loggedInUser)
     if (loggedInUser) {
       return loggedInUser;
     } else {

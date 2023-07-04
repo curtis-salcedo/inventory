@@ -14,11 +14,20 @@ class OAuthApplication(models.Model):
 
     def __str__(self):
         return self.name
+    
+# Business Model
+class Business(models.Model):
+    business_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
 
 # CustomUser Model
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=255, null=True)
+    business = models.ForeignKey(Business, on_delete=models.CASCADE, related_name='users', null=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
@@ -32,16 +41,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
-
-
-# Business Model
-class Business(models.Model):
-    business_id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=100, unique=True)
-
-    def __str__(self):
-        return self.name
-
 
 # Location Model
 class Location(models.Model):
@@ -75,17 +74,17 @@ class SubCategory(models.Model):
 # Product Model
 class Product(models.Model):
     product_id = models.AutoField(primary_key=True)
+    number = models.CharField(max_length=100, unique=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
     sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name='products', null=True)
     name = models.CharField(max_length=100, unique=True)
     description = models.CharField(max_length=500, null=True)
     product_number = models.CharField(max_length=100)
-    # vendor = models.CharField(max_length=100, null=True)
-    # vendor_product_number = models.CharField(max_length=100, null=True)
+    vendor = models.CharField(max_length=100, null=True)
     price = models.FloatField()
     case_size = models.IntegerField(null=True)
+    pack_type = models.CharField(max_length=100, null=True)
     count_by = models.CharField(max_length=100)
-    sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name='products', null=True)
 
     def __str__(self):
         return self.name
@@ -117,7 +116,7 @@ class ProductMixTemplate(models.Model):
 # Inventory Model
 class Inventory(models.Model):
     inventory_id = models.AutoField(primary_key=True)
-    # inventory_items = models.ForeignKey(InventoryItem, on_delete=models.CASCADE, related_name='inventoryshell', null=True)
+    inventory_items = models.ManyToManyField(InventoryItem, related_name='inventories')
     location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='inventoryshell')
     month = models.CharField(max_length=100, null=True)
     year = models.CharField(max_length=100, null=True)

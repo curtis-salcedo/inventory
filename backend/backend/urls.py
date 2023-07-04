@@ -39,6 +39,8 @@ urlpatterns = [
 
     # path('auth/google/callback/', views.google_auth_callback, name='google_auth_callback'),
 
+    path('api/test_import/', views.test_import, name='test_import'),
+
     # path('accounts/google/login/callback/', views.google_auth_callback, name='google_auth_callback'), 
 
     path('accounts/google/login/request/', views.google_login_proxy, name='google_login_proxy'),

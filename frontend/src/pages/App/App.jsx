@@ -30,8 +30,6 @@ export default function App() {
     fetchUser();
   }, []);
 
-  console.log(user);
-
   return (
     <main className="App">
       <NavBar user={user} setUser={setUser} />

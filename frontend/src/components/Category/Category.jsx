@@ -22,12 +22,13 @@ import {
 } from 'reactstrap';
 
 export default function Category() {
+  const { user } = useContext(DataContext);
   const [viewCompleted, setViewCompleted] = useState(false);
   const [categoryList, setCategoryList] = useState([]);
   const [modal, setModal] = useState(false);
   const [activeItem, setActiveItem] = useState({
     category_id: '',
-    business: 1,
+    business: user.business,
     name: '',
     description: '',
   });
@@ -62,12 +63,12 @@ export default function Category() {
     axios.delete(`/api/category/${category.category_id}`).then((res) => refreshList());
   };
 
-  const createCategory = () => {
+  const handleCreate = () => {
     const category = {
-      category_id: null,
+      category_id: '',
       name: '',
       description: '',
-      business: 1,
+      business: user.business,
     };
     setActiveItem(category);
     setModal(!modal);
@@ -99,12 +100,14 @@ export default function Category() {
     ));
   };
 
+  const showModal = () => {
+    setModal(!modal);
+  };
+
   return (
-
-
-
     <main className="container">
       <Container>
+        <Button onClick={() => showModal()}>Add Category</Button>
         <Row>
           <Col md={6}>
             { categoryList && (

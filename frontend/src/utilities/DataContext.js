@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
+import { getUser } from "./users-api";
 
 export const DataContext = createContext();
 
@@ -12,6 +13,7 @@ export const DataProvider = (props) => {
   const [inventoryItems, setInventoryItems] = useState([]);
   const [productMix, setProductMix] = useState([]);
   const [subCategory, setSubCategory] = useState([]);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -19,6 +21,9 @@ export const DataProvider = (props) => {
 
   const fetchData = async () => {
     try {
+      const user = await getUser();
+      setUser(user);
+
       const locationResponse = await axios.get("/api/location");
       setLocations(locationResponse.data);
 
@@ -66,6 +71,7 @@ export const DataProvider = (props) => {
         setProductMix,
         subCategory: subCategory || [],
         setSubCategory,
+        user,
       }}
     >
       {props.children}

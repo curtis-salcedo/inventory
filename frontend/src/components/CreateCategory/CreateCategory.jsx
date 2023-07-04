@@ -73,7 +73,6 @@ class CreateCategory extends Component {
     if (status) {
       return this.setState({ viewCompleted: true });
     }
-
     return this.setState({ viewCompleted: false });
   };
 
@@ -104,7 +103,7 @@ class CreateCategory extends Component {
   render() {
     return (
       <main className="container">
-        <h1 className="text-white text-uppercase text-center my-4">Todo app</h1>
+        <h1 className="text-white text-uppercase text-center my-4">Category Information</h1>
         <div className="row">
           <div className="col-md-6 col-sm-10 mx-auto p-0">
             <div className="card p-3">
