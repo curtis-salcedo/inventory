@@ -73,14 +73,14 @@ export default function CreateInventorySheet({ handleShowCreateInventoryShell })
 
     if (activeInventory.inventory_id) {
       axios
-        .put(`/api/inventory/${activeInventory.inventory_id}/`, inventoryData)
+        .put(`/api/inventories/${activeInventory.inventory_id}/`, inventoryData)
         .then((res) => {
           setActiveInventory(res.data);
         })
         .catch((err) => console.log(err));
     } else {
       axios
-        .post("/api/create_inventory/", inventoryData)
+        .post("/api/inventory/create/", inventoryData)
         .then((res) => {
           setActiveInventory(res.data);
         })

@@ -9,7 +9,19 @@ import CreateInventorySheet from '../../components/CreateInventorySheet/CreateIn
 import InventorySheet from '../../components/InventorySheet/InventorySheet';
 
 // Styling Imports
-import { Label, Button, Form, FormGroup, Input } from 'reactstrap';
+import {
+  Button,
+  Card,
+  CardBody,
+  CardTitle,
+  CardSubtitle,
+  CardText,
+  CardFooter,
+  Col,
+  Container,
+  Row,
+
+} from 'reactstrap';
 
 // Axios CSRF Token Setup
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -25,18 +37,6 @@ export default function InventoryCountPage() {
   // Data Imports
   const { inventory } = useContext(DataContext);
 
-  const handleInventorySubmit = (inventory) => {
-    if (inventory.inventory_id) {
-      axios
-        .patch(`/api/inventory/${inventory.inventory_id}/`, inventory)
-        .then((res) => console.log(res.data));
-      return;
-    }
-    axios
-      .post("/api/inventory/", inventory)
-      .then((res) => console.log(res.data));
-  };
-
   const handleShowCreateInventorySheet = () => {
     setShowCreateInventorySheet(!showCreateInventorySheet);
   }
@@ -50,13 +50,24 @@ export default function InventoryCountPage() {
     setActiveInventoryId(id)
   }
 
+  const handleView = (e, id) => {
+    axios
+      .get(`/api/inventories/${id}/`)
+      .then((res) => console.log(res.data));
+
+    setShowInventory(!showInventory)
+    setActiveInventoryId(id)
+  }
 
   useEffect(() => {
   }, []);
 
   return (
     <main>
-      <div>
+        <button onClick={() => handleShowCreateInventorySheet()}>Create Inventory Sheet
+        </button>
+  
+      {/* <div>
         { inventory.map((i) => (
           <Button
           key={i.inventory_id}
@@ -68,12 +79,33 @@ export default function InventoryCountPage() {
           </Button>
         )
         )}
+      </div> */}
+
+      <div>
+      <Container>
+        <Row>
+            { inventory && (
+              inventory.map((i) => (
+          <Col key={i.inventory_id} md={3}>
+              <Card >
+                <CardBody>
+                  <CardTitle tag="h5">{i.name}</CardTitle>
+                  <CardSubtitle tag="h6" className="mb-2 text-muted">{i.name}</CardSubtitle>
+                  <CardText>Location: {i.location}</CardText>
+                  <CardText>Time: {i.month} / {i.year} </CardText>
+                  <CardFooter>
+                    <Button>Edit</Button>
+                    <Button onClick={(e) => handleView(e, i.inventory_id)}>View</Button>
+                  </CardFooter>
+              </CardBody>
+            </Card>
+          </Col>
+              ))
+              )
+            }
+        </Row>
+      </Container>
       </div>
-
-      <button onClick={() => handleShowCreateInventorySheet()}>Create Inventory Sheet
-      </button>
-
-      <button onClick={() => handleInventorySubmit()}>Test Submit (Don't Use) </button>
 
       <div>
         { showCreateInventorySheet ? (

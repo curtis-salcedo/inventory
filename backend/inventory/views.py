@@ -69,7 +69,7 @@ def home(request):
 
 import csv
 
-def test_import(request):
+def import_products(request):
     user = request.user
     if request.method == 'POST':
         # Define the file being uploaded
@@ -108,7 +108,6 @@ def test_import(request):
                     category=cat,
                 )
                 print(f"Sub Category created: {sub.name}")
-
             product = Product.objects.create(
                 number=row[0],
                 vendor=row[1],
@@ -306,12 +305,6 @@ def find_inventory_item(request):
     return Response(parsed_inventory_items, status=status.HTTP_200_OK)
 
 
-@api_view(['POST'])
-def create_inventory_sheet(request):
-    print("Request data:", request.data)
-    return Response(status=status.HTTP_200_OK)
-
-
 @api_view(['GET'])
 def get_inventory_items(request):
     inventory_id = request.GET.get('inventory_id')
@@ -326,7 +319,7 @@ def get_inventory_items(request):
         total = item.total
         price = item.price
         vendor = item.product.vendor
-        sub_category = item.product.sub_category
+        sub_category = item.product.sub_category.name
         active_inventory_items.append({
             'inventory_item_id': inventory_item_id,
             'name': name,

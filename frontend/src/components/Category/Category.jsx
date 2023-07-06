@@ -22,13 +22,13 @@ import {
 } from 'reactstrap';
 
 export default function Category() {
-  const { user } = useContext(DataContext);
+  const { user, business } = useContext(DataContext);
   const [viewCompleted, setViewCompleted] = useState(false);
   const [categoryList, setCategoryList] = useState([]);
   const [modal, setModal] = useState(false);
   const [activeItem, setActiveItem] = useState({
     category_id: '',
-    business: user.business,
+    business: business,
     name: '',
     description: '',
   });
@@ -39,7 +39,7 @@ export default function Category() {
 
   const refreshList = () => {
     axios
-      .get('/api/category/')
+      .get('/api/categories/')
       .then((res) => setCategoryList(res.data))
       .catch((err) => console.log(err));
   };
@@ -52,15 +52,15 @@ export default function Category() {
     toggle();
     if (category.category_id) {
       axios
-        .put(`/api/category/${category.category_id}/`, category)
+        .put(`/api/categories/${category.category_id}/`, category)
         .then((res) => refreshList());
       return;
     }
-    axios.post('/api/category/', category).then((res) => refreshList());
+    axios.post('/api/categories/', category).then((res) => refreshList());
   };
 
   const handleDelete = (category) => {
-    axios.delete(`/api/category/${category.category_id}`).then((res) => refreshList());
+    axios.delete(`/api/categories/${category.category_id}`).then((res) => refreshList());
   };
 
   const handleCreate = () => {
@@ -68,7 +68,7 @@ export default function Category() {
       category_id: '',
       name: '',
       description: '',
-      business: user.business,
+      business: business,
     };
     setActiveItem(category);
     setModal(!modal);
@@ -109,10 +109,10 @@ export default function Category() {
       <Container>
         <Button onClick={() => showModal()}>Add Category</Button>
         <Row>
-          <Col md={6}>
             { categoryList && (
               categoryList.map((c) => (
-              <Card key={c.category_id}>
+          <Col key={c.category_id} md={3}>
+              <Card >
                 <CardBody>
                   <CardTitle tag="h5">{c.name}</CardTitle>
                   <CardSubtitle tag="h6" className="mb-2 text-muted">{c.description}</CardSubtitle>
@@ -123,10 +123,10 @@ export default function Category() {
                   </CardFooter>
               </CardBody>
             </Card>
+          </Col>
               ))
               )
             }
-          </Col>
         </Row>
       </Container>
       {modal ? (

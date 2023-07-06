@@ -3,7 +3,7 @@ import axios from "axios";
 export const exportToCSV = (e, inventoryId) => {
   console.log('fileName', inventoryId)
   axios
-    .get('/api/export_inventory', {
+    .get('/api/data/export/inventory', {
       params: { inventoryId: inventoryId },
       responseType: 'blob'
   })

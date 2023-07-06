@@ -29,14 +29,14 @@ export default class AddProductModal extends Component {
 
   fetchCategories = () => {
     axios
-      .get("/api/category/")
+      .get("/api/categories/")
       .then((res) => {
         console.log(res.data)
         this.setState({ categories: res.data });
       })
       .catch((err) => console.log(err));
     axios
-      .get("/api/sub_category/")
+      .get("/api/sub_categories/")
       .then((res) => {
         console.log(res.data)
         this.setState({ sub_categories: res.data });
@@ -48,7 +48,7 @@ export default class AddProductModal extends Component {
 
   // fetchSubCategories = () => {
   //   axios
-  //     .get("/api/sub_category/")
+  //     .get("/api/sub_categories/")
   //     .then((res) => {
   //       console.log('sub_category data', res.data)
   //       this.setState({ sub_categories: res.data });

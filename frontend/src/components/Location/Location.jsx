@@ -25,10 +25,14 @@ export default function Location() {
   const { locations, business, setLocations, user } = useContext(DataContext);
   const [modal, setModal] = useState(false);
   const [activeItem, setActiveItem] = useState({
-    business: user.business,
+    business: business,
     name: '',
     address: '',
   });
+
+  useEffect(() => {
+    refreshList();
+  }, []);
 
   const toggle = () => {
     setModal(!modal);
@@ -38,25 +42,25 @@ export default function Location() {
     toggle();
     if (location.id) {
       axios
-        .put(`/api/location/${location.id}/`, location)
+        .put(`/api/locations/${location.id}/`, location)
         .then((res) => refreshList());
       return;
     }
     axios
-      .post('/api/location/', location)
+      .post('/api/locations/', location)
       .then((res) => refreshList());
   };
 
   const refreshList = () => {
     axios
-      .get('/api/location/')
+      .get('/api/locations/')
       .then((res) => setLocations(res.data))
       .catch((err) => console.log(err));
   };
 
   const handleDelete = (location) => {
     axios
-      .delete(`/api/location/${location.id}`)
+      .delete(`/api/locations/${location.id}`)
       .then((res) => refreshList());
   };
 
@@ -77,7 +81,7 @@ export default function Location() {
 
   const showModal = () => {
     setActiveItem({
-      business: user.business,
+      business: business,
       name: '',
       address: '',
     });

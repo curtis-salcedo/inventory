@@ -27,7 +27,7 @@ class CreateCategory extends Component {
 
   refreshList = () => {
     axios
-      .get("/api/category/")
+      .get("/api/categories/")
       .then((res) => this.setState({ categoryList: res.data }))
       .catch((err) => console.log(err));
   };
@@ -40,18 +40,18 @@ class CreateCategory extends Component {
     this.toggle();
     if(category.id) {
       axios
-        .put(`/api/category/${category.id}/`, category)
+        .put(`/api/categories/${category.id}/`, category)
         .then((res) => this.refreshList());
       return;
     }
     axios
-      .post("/api/category/", category)
+      .post("/api/categories/", category)
       .then((res) => this.refreshList());
   };
 
   handleDelete = (category) => {
     axios
-      .delete(`/api/category/${category.id}`)
+      .delete(`/api/categories/${category.id}`)
       .then((res) => this.refreshList());
   };
 

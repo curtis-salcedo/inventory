@@ -24,16 +24,15 @@ export default function InventorySheet({ activeInventoryId }) {
   const [ itemDetail, setItemDetail ] = useState(false)
   const [ currentItem, setCurrentItem ] = useState([])
 
+  // Sort State
+  const [ sortedColumn, setSortedColumn ] = useState(null);
+  const [ sortOrder, setSortOrder ] = useState('asc');
+
   const [ item, setItem ] = useState({
     quantity: "",
     total: "",
     price: "",
   });
-
-  const categoryLookup = category.reduce((lookup, cat) => {
-    lookup[cat.category_id] = cat;
-    return lookup;
-  }, {});
 
   const handleChange = (e, price, total, category) => {
     fetchInventoryItems();
@@ -70,7 +69,7 @@ export default function InventorySheet({ activeInventoryId }) {
     e.preventDefault();
     try {
       axios
-        .put(`/api/update_inventory_sheet/${activeInventoryId}`, activeInventoryItems)
+        .put(`/api/inventory/update/${activeInventoryId}`, activeInventoryItems)
         .then((res) => console.log(res.data));
     } catch (error) {
       console.log('error')
@@ -91,9 +90,30 @@ export default function InventorySheet({ activeInventoryId }) {
     setItemDetail(!itemDetail)
   }
 
+  const handleSort = (column) => {
+    console.log('handleSort', column);
+    if (sortedColumn === column) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortedColumn(column);
+      setSortOrder('asc');
+    }
+  };
+
+  const sortedItems = [...activeInventoryItems].sort((a, b) => {
+    if (a[sortedColumn] < b[sortedColumn]) {
+      return sortOrder === 'asc' ? -1 : 1;
+    }
+    if (a[sortedColumn] > b[sortedColumn]) {
+      return sortOrder === 'asc' ? 1 : -1;
+    }
+    return 0;
+  });
+  
+
   useEffect(() => {
     fetchInventoryItems()
-    setActiveProductList(products)
+    setActiveInventoryItems(products)
   }, [activeInventoryId])
 
   return (
@@ -111,21 +131,21 @@ export default function InventorySheet({ activeInventoryId }) {
         <table>
           <thead>
             <tr>
-              <th>Item ID</th>
-              <th>Name</th>
-              <th>Vendor</th>
-              <th>Category</th>
-              <th>Sub Category</th>
-              <th>Price</th>
-              <th>Count By</th>
-              <th>Quantity</th>
-              <th>Total</th>
-              <th>Details</th>
+              <th onClick={() => handleSort('inventory_item_id')}>Product Number***</th>
+              <th onClick={() => handleSort('name')}>Name</th>
+              <th onClick={() => handleSort('vendor')}>Vendor</th>
+              <th onClick={() => handleSort('category')}>Category</th>
+              <th onClick={() => handleSort('sub_category')}>Sub Category</th>
+              <th onClick={() => handleSort('price')}>Price</th>
+              <th onClick={() => handleSort('count_by')}>Count By</th>
+              <th onClick={() => handleSort('quantity')}>Quantity</th>
+              <th onClick={() => handleSort('total')}>Total</th>
+              <th onClick={() => handleSort('details')}>Details</th>
             </tr>
           </thead>
           <tbody>
-            { activeInventoryItems &&
-            activeInventoryItems.map((i) => (
+            { sortedItems &&
+            sortedItems.map((i) => (
               <tr key={i.inventory_item_id}>
               <td>{i.inventory_item_id}</td>
               <td >{i.name}</td>

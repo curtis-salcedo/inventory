@@ -60,7 +60,7 @@ export function logoutUser(e) {
 //   try {
 //     const Token = getCookieValue('csrftoken')
 //     axios.defaults.headers.post['X-CSRFToken'] = Token;
-//     const signUpResponse = await axios.post('/api/user/', {
+//     const signUpResponse = await axios.post('/api/users/', {
 //       email,
 //       password,
 //       });

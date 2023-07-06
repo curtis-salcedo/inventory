@@ -20,11 +20,13 @@ import AuthPage from "../AuthPage/AuthPage";
 
 export default function App() {
   const [user, setUser] = useState(null);
+  const [business, setBusiness] = useState(null);
   
   useEffect(() => {
     async function fetchUser() {
       const userData = await getUser();
       setUser(userData);
+      console.log('userData', userData)
     }
 
     fetchUser();
@@ -33,7 +35,7 @@ export default function App() {
   return (
     <main className="App">
       <NavBar user={user} setUser={setUser} />
-      { user ?
+      { user && user.business ?
       <Routes>
         {/* Route components in here */}
         <Route path="/" element={<LandingPage />} />

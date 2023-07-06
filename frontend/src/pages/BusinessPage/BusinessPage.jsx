@@ -10,7 +10,11 @@ import Product from '../../components/Product/Product';
 import Location from '../../components/Location/Location';
 
 // Styling Imports
-import { Form, FormGroup,Button,Input } from 'reactstrap';
+import { Form,
+  FormGroup,
+  Button,
+  Input
+} from 'reactstrap';
 
 // Axios CSRF Token Setup
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -19,6 +23,7 @@ axios.defaults.xsrfCookieName = "csrftoken";
 
 export default function BusinessPage() {
   // Data Imports
+  const { business } = useContext(DataContext);
   const [file, setFile] = useState(null);
 
   useEffect(() => {
@@ -36,7 +41,7 @@ export default function BusinessPage() {
     formData.append('file', file);
 
     try {
-      const response = await axios.post('/api/test_import/', formData, {
+      const response = await axios.post('/api/data/import/products', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

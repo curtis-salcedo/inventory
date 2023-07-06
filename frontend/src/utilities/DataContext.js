@@ -24,19 +24,19 @@ export const DataProvider = (props) => {
       const user = await getUser();
       setUser(user);
 
-      const locationResponse = await axios.get("/api/location");
+      const locationResponse = await axios.get("/api/locations");
       setLocations(locationResponse.data);
 
-      const businessResponse = await axios.get("/api/business");
+      const businessResponse = await axios.get("/api/businesses");
       setBusiness(businessResponse.data);
 
       const productResponse = await axios.get("/api/products");
       setProducts(productResponse.data);
 
-      const categoryResponse = await axios.get("/api/category");
+      const categoryResponse = await axios.get("/api/categories");
       setCategory(categoryResponse.data);
 
-      const inventoryResponse = await axios.get("/api/inventory");
+      const inventoryResponse = await axios.get("/api/inventories");
       setInventory(inventoryResponse.data);
 
       const inventoryItemResponse = await axios.get("/api/inventory_items");
@@ -45,7 +45,7 @@ export const DataProvider = (props) => {
       const productMixResponse = await axios.get("/api/product_mix");
       setProductMix(productMixResponse.data);
 
-      const subCategoryResponse = await axios.get("/api/sub_category");
+      const subCategoryResponse = await axios.get("/api/sub_categories");
       setSubCategory(subCategoryResponse.data);
     } catch (err) {
       // console.log(err);
@@ -71,7 +71,7 @@ export const DataProvider = (props) => {
         setProductMix,
         subCategory: subCategory || [],
         setSubCategory,
-        user,
+        user: user || null,
       }}
     >
       {props.children}

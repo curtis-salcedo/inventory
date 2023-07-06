@@ -94,6 +94,7 @@ class InventoryItem(models.Model):
     inventory_id = models.IntegerField(null=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='inventoryitems')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='inventoryitems', null=True)
+    sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name='inventoryitems', null=True)
     quantity = models.DecimalField(max_digits=10, decimal_places=2)
     total = models.DecimalField(max_digits=10, decimal_places=2)
     price = models.DecimalField(max_digits=10, decimal_places=2)
