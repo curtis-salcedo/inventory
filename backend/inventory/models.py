@@ -79,12 +79,11 @@ class Product(models.Model):
     sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name='products', null=True)
     name = models.CharField(max_length=100, unique=True)
     description = models.CharField(max_length=500, null=True)
-    product_number = models.CharField(max_length=100)
     vendor = models.CharField(max_length=100, null=True)
-    price = models.FloatField()
-    case_size = models.IntegerField(null=True)
+    price = models.FloatField(max_length=100, null=True)
+    case_size = models.FloatField(null=True)
     pack_type = models.CharField(max_length=100, null=True)
-    count_by = models.CharField(max_length=100)
+    count_by = models.CharField(max_length=100, null=True)
 
     def __str__(self):
         return self.name

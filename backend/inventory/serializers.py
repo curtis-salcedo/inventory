@@ -10,9 +10,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
         password = validated_data.pop('password', None)
         if password:
             validated_data['password'] = make_password(password)
-        
         return super().create(validated_data)
-    
     class Meta:
         model = CustomUser
         fields = ('email', 'password', 'business')
@@ -20,16 +18,12 @@ class CustomUserSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField()
-
     def validate(self, attrs):
         email = attrs.get('email')
         password = attrs.get('password')
-
         user = authenticate(email=email, password=password)
-
         if not user:
             raise serializers.ValidationError("Invalid email or password.")
-
         attrs['user'] = user
         return attrs
 
@@ -52,12 +46,12 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         permission_classees = [permissions.IsAuthenticated]
         model = Product
-        fields = ('product_id', 'category', 'name', 'description', 'product_number', 'description', 'price', 'case_size', 'count_by', 'sub_category')
+        fields = ('product_id', 'category', 'sub_category', 'name', 'description', 'number', 'description', 'price', 'case_size', 'count_by', 'sub_category', 'pack_type', 'vendor')
 
 class InventoryItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = InventoryItem
-        fields = ('inventory_item_id', 'inventory_id', 'product', 'category', 'quantity', 'total', 'price')
+        fields = ('inventory_item_id', 'inventory_id', 'product', 'sub_category', 'category', 'quantity', 'total', 'price')
 
 class InventorySerializer(serializers.ModelSerializer):
     class Meta:

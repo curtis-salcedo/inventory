@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
+from django.db import models
 
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 
@@ -69,15 +70,62 @@ def home(request):
 import csv
 
 def test_import(request):
-    print("Test Import request:", request.method)
-    print("Test Import request data:", request.FILES)
-    uploaded_file = request.FILES['file']
-    wrapper = open(uploaded_file, 'r')
-    reader = csv.reader(wrapper)
-    for row in reader:
-        print(row)
+    user = request.user
+    if request.method == 'POST':
+        # Define the file being uploaded
+        uploaded_file = request.FILES['file']
+        # Read the file, which was saved in 8 bit format
+        file_content = uploaded_file.read().decode('utf-8').splitlines()
+        # Create a reader object to iterate through the file
+        reader = csv.reader(file_content)
+        # Skip the first row of the file
+        next(reader)
+        # Iterate through the file and create a product for each row
+        for row in reader:
+            # Guard against duplicate products
+            if Product.objects.filter(models.Q(number=row[0]) | models.Q(name=row[2])).exists():
+                print(f"Product exists: {row[0]}")
+                continue
+            # Guard against duplicate categories, and create a new category if it doesn't exist
+            if Category.objects.filter(name=row[4]).exists():
+                cat = Category.objects.get(name=row[4])
+                print(f"Category exists: {cat.category_id}")
+                
+            else:
+                cat = Category.objects.create(
+                    name=row[4],
+                    business=user.business,
+                )
+                print(f"Category created: {cat.name}")
+            # Check for Sub Category, and create a new sub category if it doesn't exist
+            subcategories = SubCategory.objects.filter(name=row[3], category=cat)
+            if subcategories.exists():
+                sub = subcategories.first()
+                print(f"Sub Category exists: {sub.name}")
+            else:
+                sub = SubCategory.objects.create(
+                    name=row[3],
+                    category=cat,
+                )
+                print(f"Sub Category created: {sub.name}")
 
-    return JsonResponse({'message': 'Test Import Successful'}, status=status.HTTP_200_OK, safe=False)
+            product = Product.objects.create(
+                number=row[0],
+                vendor=row[1],
+                name=row[2],
+                sub_category=sub,
+                category=cat,
+                case_size=row[5],
+                pack_type=row[6],
+                count_by=row[7],
+                price=float(row[8]),
+            )
+            print(f"Product created: {product.name}")
+            product.save()
+    else:
+        print('Test Import is not a POST request', request.method)
+        return
+    return JsonResponse({'message': 'Data Import successful'}, status=status.HTTP_200_OK, safe=False)
 
 def google_login_proxy(request):
     print('Google Login Proxy request:', request)
@@ -277,6 +325,8 @@ def get_inventory_items(request):
         quantity = item.quantity
         total = item.total
         price = item.price
+        vendor = item.product.vendor
+        sub_category = item.product.sub_category
         active_inventory_items.append({
             'inventory_item_id': inventory_item_id,
             'name': name,
@@ -285,6 +335,8 @@ def get_inventory_items(request):
             'quantity': quantity,
             'total': total,
             'price': price,
+            'vendor': vendor,
+            'sub_category': sub_category,
         })
     return JsonResponse(active_inventory_items, status=status.HTTP_200_OK, safe=False)
 
@@ -319,19 +371,23 @@ def get_products(request):
     product_list = []
     for product in products:
         product_id = product.product_id
-        product_number = product.product_number
+        number = product.number
         name = product.name
         category = product.category.name
         sub_category = product.sub_category.name
+        vendor = product.vendor
+        pack_type = product.pack_type
         count_by = product.count_by
         case_size = product.case_size
         price = product.price
         product_list.append({
             'product_id': product_id,
-            'product_number': product_number,
+            'number': number,
             'name': name,
             'category': category,
             'sub_category': sub_category,
+            'vendor': vendor,
+            'pack_type': pack_type,
             'count_by': count_by,
             'case_size': case_size,
             'price': price,

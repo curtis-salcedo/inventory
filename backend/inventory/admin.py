@@ -36,7 +36,7 @@ class CategoryAdmin(admin.ModelAdmin):
     list = ('name', 'description', 'business')
 
 class ProductAdmin(admin.ModelAdmin):
-    list = ('name', 'description', 'product_number', 'category', 'sub_category', 'price', 'case_size', 'count_by')
+    list = ('name', 'description', 'number', 'category', 'sub_category', 'price', 'case_size', 'count_by', 'vendor', 'pack_type')
 
 class InventoryItemAdmin(admin.ModelAdmin):
     list = ('inventory', 'product', 'qauntity', 'total', 'price')

@@ -96,7 +96,7 @@ export default function ProductTable() {
   const handleCreateProduct = () => {
     const newProduct = {
       product_id: '',
-      product_number: '',
+      number: '',
       name: '',
       category: '',
       sub_category: '',
@@ -121,7 +121,9 @@ export default function ProductTable() {
             <th onClick={() => handleSort('category')}>Category</th>
             <th onClick={() => handleSort('sub_category')}>Sub-Category</th>
             <th onClick={() => handleSort('price')}>Price</th>
+            <th onClick={() => handleSort('vendor')}>Vendor</th>
             <th onClick={() => handleSort('case_size')}>Case Size</th>
+            <th onClick={() => handleSort('pack_type')}>Pack Type</th>
             <th onClick={() => handleSort('count_by')}>Count By</th>
             <th></th>
           </tr>
@@ -130,12 +132,14 @@ export default function ProductTable() {
           {products ? (
             products.map((p) => (
               <tr scope="row" key={p.product_id}>
-                <td>{p.product_number}</td>
+                <td>{p.number}</td>
                 <td>{p.name}</td>
                 <td>{p.category}</td>
                 <td>{p.sub_category || 'None'}</td>
                 <td>$ {p.price}</td>
+                <td>{p.vendor}</td>
                 <td>{p.case_size}</td>
+                <td>{p.pack_type}</td>
                 <td>{p.count_by}</td>
                 <td>
                   <Button onClick={(e) => showProductDetails(e, p)} size="sm" color="primary">

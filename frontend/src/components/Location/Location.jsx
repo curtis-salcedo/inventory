@@ -86,7 +86,6 @@ export default function Location() {
 
   return ( 
     <main>
-      <h1>Locations</h1>
       <Container>
         <Button onClick={() => showModal()}>Add Location</Button>
         <Row>

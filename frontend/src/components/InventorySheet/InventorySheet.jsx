@@ -113,7 +113,9 @@ export default function InventorySheet({ activeInventoryId }) {
             <tr>
               <th>Item ID</th>
               <th>Name</th>
+              <th>Vendor</th>
               <th>Category</th>
+              <th>Sub Category</th>
               <th>Price</th>
               <th>Count By</th>
               <th>Quantity</th>
@@ -127,7 +129,9 @@ export default function InventorySheet({ activeInventoryId }) {
               <tr key={i.inventory_item_id}>
               <td>{i.inventory_item_id}</td>
               <td >{i.name}</td>
+              <td>{i.vendor}</td>
               <td>{i.category}</td>
+              <td>{i.sub_category}</td>
               <td>{i.price}</td>
               <td>{i.count_by}</td>
               <td>

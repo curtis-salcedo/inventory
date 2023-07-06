@@ -65,7 +65,7 @@ export default function BusinessPage() {
       <Product />
 
       <div>Import CSV</div>
-      <input type="file" id="csvImport" accept="csv" onChange={handleChange} />
+      {/* <input type="file" id="csvImport" accept="csv" onChange={handleChange} /> */}
       <Form>
         <FormGroup>
           <Input type="file" id="csvImport" accept="csv" onChange={handleChange} ></Input>
