@@ -6,6 +6,7 @@ import { DataContext } from '../../utilities/DataContext';
 
 // Component Imports
 import ProductModal from './ProductModal'
+import EditProductModal from './EditProductModal';
 import AddProductModal from '../AddProduct/AddProductModal';
 
 // Styling Imports
@@ -15,9 +16,11 @@ import {
 } from 'reactstrap';
 
 export default function ProductTable() {
+  const { category } = useContext(DataContext);
   const [products, setProducts] = useState([]);
   const [activeProduct, setActiveProduct] = useState(null);
   const [showProductModal, setShowProductModal] = useState(false);
+  const [showEditProductModal, setShowEditProductModal] = useState(false);
   const [showAddProductModal, setShowAddProductModal] = useState(false);
   // Sort State
   const [sortedColumn, setSortedColumn] = useState(null);
@@ -39,20 +42,32 @@ export default function ProductTable() {
 
   const fetchProducts = () => {
     axios
-      .get('/api/get_products/')
-      .then((res) => { setProducts(res.data) })
+      .get('/api/products/')
+      .then((res) => {
+        setProducts(res.data);    
+      })
       .catch((err) => console.log(err));
   };
 
-  const showProductDetails = (e, product) => {
+  const showProduct = (e, product) => {
     console.log(product)
     handleProductModal(product);
     setShowProductModal(!showProductModal);
   };
 
+  const showEditProduct = (e, product) => {
+    handleEditProductModal(product);
+    setShowEditProductModal(!showEditProductModal);
+  };
+
   const handleProductModal = (product) => {
     setActiveProduct(product);
     setShowProductModal(!showProductModal);
+  };
+
+  const handleEditProductModal = (product) => {
+    setActiveProduct(product);
+    setShowEditProductModal(!showEditProductModal);
   };
 
   const handleAddProductModal = (product) => {
@@ -69,7 +84,7 @@ export default function ProductTable() {
       return;
     }
     axios
-      .post("/api/create_product/", product)
+      .post("/api/products/create", product)
       .then((res) => refreshList());
   };
 
@@ -109,6 +124,8 @@ export default function ProductTable() {
     setShowAddProductModal(!showAddProductModal);
     refreshList();
   };
+
+  console.log(products[0])
     
   return (
     <>
@@ -142,8 +159,11 @@ export default function ProductTable() {
                 <td>{p.pack_type}</td>
                 <td>{p.count_by}</td>
                 <td>
-                  <Button onClick={(e) => showProductDetails(e, p)} size="sm" color="primary">
+                  <Button onClick={(e) => showProduct(e, p)} size="sm" color="primary">
                     Details
+                  </Button>
+                  <Button onClick={(e) => showEditProduct(e, p)} size="sm" color="primary">
+                    Edit
                   </Button>
                 </td>
               </tr>
@@ -155,20 +175,34 @@ export default function ProductTable() {
           )}
         </tbody>
       </Table>
+      {/* Show Product Modal */}
       {showProductModal && (
         <ProductModal
+            activeProduct={activeProduct}
+            toggle={handleProductModal}
+            onSave={handleSubmit}
+            handleEditProductModal={handleEditProductModal}
+            setShowEditProductModal={setShowEditProductModal}
+          />
+          )}
+
+      {/* Edit Product Modal */}
+      { showEditProductModal && (
+        <EditProductModal
           activeProduct={activeProduct}
-          toggle={handleProductModal}
+          toggle={handleEditProductModal}
           onSave={handleSubmit}
         />
       )}
-      {showAddProductModal && (
+
+
+      {/* {showAddProductModal && (
         <AddProductModal
           activeItem={activeProduct}
           toggle={handleAddProductModal}
           onSave={handleSubmit}
         />
-      )}
+      )} */}
     </>
   );
 };

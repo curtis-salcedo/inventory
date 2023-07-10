@@ -31,7 +31,7 @@ export default function ProductMix({ activeLocation, activeProductMix, toggleMix
   const fetchData = () => {
     try {
       const queryParam = activeInventoryItems;
-      axios.get('/api/find_inventory_item/', {
+      axios.get('/api/inventory/items/find', {
       params: { inventoryItems: queryParam },
     })
       .then((response) => {

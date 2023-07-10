@@ -28,7 +28,6 @@ export default function App() {
       setUser(userData);
       console.log('userData', userData)
     }
-
     fetchUser();
   }, []);
 

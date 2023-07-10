@@ -31,7 +31,7 @@ export default class ItemDetail extends Component {
 
   handleFetchItem = () => {
     axios
-      .get(`/api/get_item_detail/${this.state.currentItem}`)
+      .get(`api/inventory/items/${this.state.currentItem}`)
       .then((res) => {
         console.log(res.data)
         this.setState({ foundItem: res.data });

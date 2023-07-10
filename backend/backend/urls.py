@@ -39,11 +39,9 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 
-    # path('auth/google/callback/', views.google_auth_callback, name='google_auth_callback'),
-
-
-    # path('accounts/google/login/callback/', views.google_auth_callback, name='google_auth_callback'), 
-
+    path('proxy/accounts/login/', views.proxy_login, name='proxy_login'),
+    # path('proxy/accounts/logout/', views.proxy_logout, name='proxy_logout'),
+    path('proxy/accounts/google/login/request/', views.google_login_proxy, name='google_login_proxy'),
     path('accounts/google/login/request/', views.google_login_proxy, name='google_login_proxy'),
     path('redirect/', views.redirect_view, name='redirect'),
 
@@ -69,13 +67,13 @@ urlpatterns = [
     path('api/get_product_mix_items/', views.get_product_mix_items, name='get_product_mix_items'),
 
     # Inventory Item URLs
-    path('api/find_inventory_item/', views.find_inventory_item, name='find_inventory_item'),
-    path('api/get_inventory_items/', views.get_inventory_items, name='get_inventory_items'),
-    path('api/get_item_detail/<int:id>', views.get_item_detail, name='get_item_detail'),
+    path('api/inventory/items/find', views.find_inventory_item, name='find_inventory_item'),
+    path('api/inventory/items/', views.get_inventory_items, name='get_inventory_items'),
+    path('api/inventory/items/<int:id>', views.get_item_detail, name='get_item_detail'),
 
     # Products URLs
-    path('api/get_products/', views.get_products, name='get_products'),
-    path('api/create_product/', views.create_product, name='create_product'),
+    path('api/products/', views.get_products, name='get_products'),
+    path('api/products/create', views.create_product, name='create_product'),
 
 ]
 

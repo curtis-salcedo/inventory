@@ -114,34 +114,8 @@ export default function InventoryCountPage() {
 
   return (
     <main>
-      <div className="row">
-        <div className="col-md-6">
-          <div className="card card-body">
-            <h2>Inventory Count Page</h2>
-            <div className="mb-4">
-              <button
-                className="btn btn-primary"
-                onClick={createProduct}
-              >
-                Add Product
-              </button>
-            </div>
-
-            <ul className="list-group">
-              {renderProducts()}
-            </ul>
-          </div>
-        </div>
-      </div>
-      {modal ? (
-        <AddProductModal
-          activeItem={activeItem}
-          toggle={toggle}
-          onSave={handleSubmit}
-        />
-      ) : null}
-
-      <table>
+      <h1>This is the landing page</h1>
+      {/* <table>
         <thead>
           <tr>
             <th>Name</th>
@@ -150,7 +124,6 @@ export default function InventoryCountPage() {
             <th>Description</th>
             <th>Product Number</th>
             <th>Vendor</th>
-            <th>Vendor Product Number</th>
             <th>Price</th>
             <th>Case Size</th>
             <th>Count By</th>
@@ -163,12 +136,31 @@ export default function InventoryCountPage() {
               <td>{p.category}</td>
               <td>{p.sub_category}</td>
               <td>{p.description}</td>
-              <td>{p.product_number}</td>
+              <td>{p.number}</td>
               <td>{p.vendor}</td>
-              <td>{p.vendor_product_number}</td>
               <td>{p.price}</td>
               <td>{p.case_size}</td>
               <td>{p.count_by}</td>
+              <td>          
+          <button
+            className="btn btn-secondary mr-2"
+            onClick={() => editProduct(p)}
+          >
+            Edit
+          </button>
+          <button
+            className="btn btn-secondary mr-2"
+            onClick={() => handleDelete(p)}
+          >
+            Delete
+          </button>
+          <button
+            className="btn btn-secondary mr-2"
+            onClick={() => handleToggleProductInfoModal(p)}
+          >
+            Product Info
+          </button></td>
+            
             </tr>
           ))}
         </tbody>
@@ -181,6 +173,13 @@ export default function InventoryCountPage() {
           onSave={handleSubmit}
         />
       )}
+      {modal ? (
+        <AddProductModal
+          activeItem={activeItem}
+          toggle={toggle}
+          onSave={handleSubmit}
+        />
+      ) : null} */}
 
     </main>
   );

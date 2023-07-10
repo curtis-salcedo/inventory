@@ -61,7 +61,7 @@ export const DataProvider = (props) => {
         setBusiness,
         category: category || [],
         setCategory,
-        products: products || [],
+        products: [ ...products, products.number] || [],
         setProducts,
         inventory: inventory || [],
         setInventory,

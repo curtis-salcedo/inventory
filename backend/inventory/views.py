@@ -8,8 +8,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
 from django.db import models
 
-from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
-
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import viewsets, status
@@ -125,6 +123,21 @@ def import_products(request):
         print('Test Import is not a POST request', request.method)
         return
     return JsonResponse({'message': 'Data Import successful'}, status=status.HTTP_200_OK, safe=False)
+
+def proxy_login(request):
+    print('Proxy Login request:', request)
+    redirect_url = 'http://localhost:8000/accounts/signup/'
+    login_success = True
+    if login_success:
+        close_script = '''
+        <script>
+            window.opener.postMessage('login_success', '*');
+            window.close();
+        </script>
+        '''
+        return JsonResponse({'redirect_url': redirect_url, 'login_success': True, 'close_script': close_script}, status=status.HTTP_200_OK, safe=False)
+    else:
+        return JsonResponse({'redirect_url': redirect_url, 'login_success': False}, status=status.HTTP_200_OK, safe=False)
 
 def google_login_proxy(request):
     print('Google Login Proxy request:', request)
@@ -312,14 +325,14 @@ def get_inventory_items(request):
     active_inventory_items = []
     for item in inventory_items:
         inventory_item_id = item.inventory_item_id
-        name = item.product.name
-        category = item.category.name
-        count_by = item.product.count_by
+        name = item.product.name.upper()
+        category = item.category.name.upper()
+        count_by = item.product.count_by.upper()
         quantity = item.quantity
         total = item.total
         price = item.price
-        vendor = item.product.vendor
-        sub_category = item.product.sub_category.name
+        vendor = item.product.vendor.upper()
+        sub_category = item.product.sub_category.name.upper()
         active_inventory_items.append({
             'inventory_item_id': inventory_item_id,
             'name': name,
@@ -330,6 +343,7 @@ def get_inventory_items(request):
             'price': price,
             'vendor': vendor,
             'sub_category': sub_category,
+            'product_number': Product.objects.get(product_id=item.product_id).number.upper(),
         })
     return JsonResponse(active_inventory_items, status=status.HTTP_200_OK, safe=False)
 
@@ -410,7 +424,9 @@ def export_inventory(request):
     request_inventory = Inventory.objects.get(inventory_id=request_id)
     request_items = request_inventory.item_list.all()
     export_data = []
+    total_inventory = 0
     for item in request_items:
+        total_inventory = total_inventory + int(item.total)
         export_data.append({
             'name': item.product.name,
             'category': item.category.name,
@@ -431,6 +447,7 @@ def export_inventory(request):
         'name': request_inventory.name,
         'item_list': export_data,
     }
+    print('Total Inventory:', total_inventory)
     print("Export inventory:", export_inventory)
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = f"attachment; filename='{request_inventory.name}.csv'"
@@ -439,9 +456,18 @@ def export_inventory(request):
     #     'Location': request_inventory.location.name,
     #     'Period': f"{request_inventory.month} / {request_inventory.year}",
     #     })
-    fieldnames = ['name', 'category', 'count_by', 'quantity', 'total', 'price']
+    fieldnames = ['name', 'category', 'count_by', 'quantity', 'total', 'price', 'Business Name', 'Location', 'Period', 'Total']
     writer = csv.DictWriter(response, fieldnames=fieldnames)
     writer.writeheader()
     writer.writerows(export_data)
+    writer = csv.DictWriter(response, fieldnames=fieldnames)
+    writer.writerow({
+        'Business Name': request_inventory.location.business.name,
+        'Location': request_inventory.location.name,
+        'Period': f"{request_inventory.month} / {request_inventory.year}",
+        })
+    writer.writerow({
+        'Total': total_inventory,
+    })
     return response
     # return JsonResponse(export_inventory, status=status.HTTP_200_OK, safe=False)

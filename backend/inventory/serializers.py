@@ -29,41 +29,58 @@ class LoginSerializer(serializers.Serializer):
 
 class BusinessSerializer(serializers.ModelSerializer):
     class Meta:
+        permission_classes = [permissions.IsAuthenticated]
         model = Business
         fields = ('business_id', 'name')
 
 class LocationSerializer(serializers.ModelSerializer):
     class Meta:
+        permission_classes = [permissions.IsAuthenticated]
         model = Location
         fields = ('location_id', 'name', 'address', 'business')
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
+        permission_classes = [permissions.IsAuthenticated]
         model = Category
         fields = ('category_id', 'name', 'description', 'business')
 
 class ProductSerializer(serializers.ModelSerializer):
+    permission_classees = [permissions.IsAuthenticated]
+    category = serializers.CharField(read_only=True)
+    sub_category = serializers.CharField(read_only=True)
     class Meta:
         permission_classees = [permissions.IsAuthenticated]
         model = Product
         fields = ('product_id', 'category', 'sub_category', 'name', 'description', 'number', 'description', 'price', 'case_size', 'count_by', 'sub_category', 'pack_type', 'vendor')
+    # Auto capitalize all string fields
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        return {key: value.upper() if isinstance(value, str) else value for key, value in representation.items()}
 
 class InventoryItemSerializer(serializers.ModelSerializer):
     class Meta:
+        permission_classes = [permissions.IsAuthenticated]
         model = InventoryItem
         fields = ('inventory_item_id', 'inventory_id', 'product', 'sub_category', 'category', 'quantity', 'total', 'price')
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        return {key: value.upper() if isinstance(value, str) else value for key, value in representation.items()}
 
 class InventorySerializer(serializers.ModelSerializer):
     class Meta:
+        permission_classes = [permissions.IsAuthenticated]
         model = Inventory
         fields = ('inventory_id', 'location', 'created_at', 'updated_at', 'name', 'month', 'year', 'item_list')
 
 class ProductMixTemplateSerializer(serializers.ModelSerializer):
     class Meta:
+        permission_classes = [permissions.IsAuthenticated]
         model = ProductMixTemplate
         fields = ('product_mix_template_id', 'location_id', 'name', 'description', 'item_list')
 
 class SubCategorySerializer(serializers.ModelSerializer):
     class Meta:
+        permission_classes = [permissions.IsAuthenticated]
         model = SubCategory
         fields = ('sub_category_id', 'category', 'name')

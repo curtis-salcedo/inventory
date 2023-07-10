@@ -36,7 +36,7 @@ export default function LoginForm() {
   const handleGoogle = (e) => {
     e.preventDefault();
     axios.post('accounts/google/login/request/')
-    .then(response => {
+      .then(response => {
       console.log(response);
     // Handle the response
       console.log(response.data.redirect_url)
@@ -53,6 +53,26 @@ export default function LoginForm() {
   });
   }
 
+  const handlePopup = (e) => {
+    let popup;
+    e.preventDefault();
+      axios.post("proxy/accounts/login/")
+        .then(response => {
+        console.log(response);
+      // Handle the response
+        console.log(response.data.redirect_url)
+        console.log(response.data.close_script)
+        console.log(response.data.login_success)
+        
+        if (response.status === 200) {
+          window.location.href = response.data.redirect_url;
+          popup = window.open(response.data.redirect_url, "popup","width=600,height=600",);
+        } else {
+          console.log('There was an error trying to load google authentication from the backend at accounts/google/login/request/')
+        }
+      });
+  }
+
   return (
     <div>
       <h1>Login</h1>
@@ -63,8 +83,11 @@ export default function LoginForm() {
 
       <button onClick={handleLogout}>Logout</button>
 
+      <div>Google button below should work</div>
+      <button onClick={handlePopup}>Login Popup</button>
+
       <div>Google</div>
-      <button onClick={handleGoogle}>Google Auth</button>
+      <button onClick={handleGoogle}>Login with Google</button>
 
     </div>
   );

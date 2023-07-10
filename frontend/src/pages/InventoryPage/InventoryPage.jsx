@@ -45,21 +45,23 @@ export default function InventoryCountPage() {
     setShowInventory(!showInventory);
   }
 
-  const handleSelectInventory = (e, id) => {
-    setShowInventory(!showInventory)
-    setActiveInventoryId(id)
-  }
-
   const handleView = (e, id) => {
     axios
       .get(`/api/inventories/${id}/`)
-      .then((res) => console.log(res.data));
-
+      .then((res) => {
+        console.log('handleView at Inventory Page',res.data.inventory_id)
+        setActiveInventoryId(res.data.inventory_id)
+      });
     setShowInventory(!showInventory)
-    setActiveInventoryId(id)
   }
 
   useEffect(() => {
+    axios
+      .get('/api/inventories/')
+      .then((res) => {
+        console.log('Inventory Page useEffect axios get', res.data)
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   return (
@@ -118,7 +120,7 @@ export default function InventoryCountPage() {
       <div>
         { showInventory ? (
           <InventorySheet
-            activeInventoryId={activeInventoryId}
+            inventoryId={activeInventoryId}
             handleShowInventory={handleShowInventory}
           />
           ) : ( null

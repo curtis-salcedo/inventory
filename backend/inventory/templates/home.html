@@ -2,8 +2,16 @@
 
 {% block content %}
 
-<h1>Auth Page</h1>
+<h1>Home Page</h1>
 
-<p>Please login</p>
+{% if user.is_authenticated %}
+    <p>Welcome {{ user.email }}!</p>
+{% else %}
+    <p>Welcome!</p>
+{% endif %}
+
+<a href="/accounts/logout">Logout</a>
+<a href="/accounts/signup">Signup</a>
+<a href="/accounts/login">Login</a>
 
 {% endblock %}

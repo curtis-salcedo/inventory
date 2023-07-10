@@ -8,6 +8,7 @@ import { DataContext } from '../../utilities/DataContext';
 import Category from '../../components/Category/Category';
 import Product from '../../components/Product/Product';
 import Location from '../../components/Location/Location';
+import BusinessMenu from '../../components/Business/BusinessMenu';
 
 // Styling Imports
 import { Form,
@@ -15,6 +16,7 @@ import { Form,
   Button,
   Input
 } from 'reactstrap';
+
 
 // Axios CSRF Token Setup
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -60,14 +62,17 @@ export default function BusinessPage() {
   return (
     <main>
 
-      <div>Manage Locations</div>
+      <div>Business Menu</div>
+      <BusinessMenu />
+
+      {/* <div>Manage Locations</div>
       <Location />
 
       <div>Manage Category</div>
       <Category />
 
       <div>Manage Products</div>
-      <Product />
+      <Product /> */}
 
       <div>Import CSV</div>
       {/* <input type="file" id="csvImport" accept="csv" onChange={handleChange} /> */}

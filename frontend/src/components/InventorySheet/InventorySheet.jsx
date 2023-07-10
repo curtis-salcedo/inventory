@@ -16,29 +16,29 @@ import {
 } from "reactstrap";
 
 
-export default function InventorySheet({ activeInventoryId }) {
+export default function InventorySheet({ inventoryId }) {
   // Data from DataContext.js file
   const { products, category, inventory } = useContext(DataContext);
   const [ activeInventoryItems, setActiveInventoryItems ] = useState([])
   const [ activeProductList, setActiveProductList ] = useState([])
   const [ itemDetail, setItemDetail ] = useState(false)
   const [ currentItem, setCurrentItem ] = useState([])
+  const [ activeInventory, setActiveInventory ] = useState([])
 
   // Sort State
   const [ sortedColumn, setSortedColumn ] = useState(null);
   const [ sortOrder, setSortOrder ] = useState('asc');
-
+  
   const [ item, setItem ] = useState({
     quantity: "",
     total: "",
     price: "",
   });
 
-  const handleChange = (e, price, total, category) => {
-    fetchInventoryItems();
+  const handleChange = (e, price, total) => {
     const { name, value } = e.target;
     console.log(name, value, price, total);
-  
+    
     const updatedItems = activeInventoryItems.map((item) => {
       if (item.inventory_item_id === name) {
         return {
@@ -59,27 +59,28 @@ export default function InventorySheet({ activeInventoryId }) {
       quantity: value.toString(),
       total: totalCalc.toFixed(2).toString(),
     };
-
     axios.patch(`/api/inventory_items/${name}/`, updatedItem)
-      .then((res) => console.log(res.data));
-    fetchInventoryItems();
+    .then((res) => console.log(res.data));
   };
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     try {
       axios
-        .put(`/api/inventory/update/${activeInventoryId}`, activeInventoryItems)
+        .put(`/api/inventories/update/${inventoryId}`, activeInventoryItems)
         .then((res) => console.log(res.data));
     } catch (error) {
       console.log('error')
     }
   }
 
-  const fetchInventoryItems = async () => {
+  const fetchInventoryItems = async (id) => {
   axios
-    .get(`/api/get_inventory_items/?inventory_id=${activeInventoryId}`)
-    .then((res) => setActiveInventoryItems(res.data))
+    .get(`/api/inventory/items/?inventory_id=${id}`)
+    .then((res) => {
+      console.log('fetch inventory items at inventory sheet',res.data)
+      setActiveInventoryItems(res.data)
+    })
     .catch((error) => {
       console.error('Error fetching inventory items:', error);
     });
@@ -112,9 +113,9 @@ export default function InventorySheet({ activeInventoryId }) {
   
 
   useEffect(() => {
-    fetchInventoryItems()
-    setActiveInventoryItems(products)
-  }, [activeInventoryId])
+    fetchInventoryItems(inventoryId);
+    setActiveInventory(inventoryId)
+  }, [inventoryId])
 
   return (
     <div>
@@ -122,7 +123,7 @@ export default function InventorySheet({ activeInventoryId }) {
         onClick={(e) => handleSubmit(e)}
       >Submit</button>
       <button
-        onClick={(e) => exportToCSV(e, activeInventoryId)}
+        onClick={(e) => exportToCSV(e, inventoryId)}
       >Export to CSV</button>
       <div>
         
@@ -131,7 +132,7 @@ export default function InventorySheet({ activeInventoryId }) {
         <table>
           <thead>
             <tr>
-              <th onClick={() => handleSort('inventory_item_id')}>Product Number***</th>
+              <th onClick={() => handleSort('inventory_item_id')}>Product Number</th>
               <th onClick={() => handleSort('name')}>Name</th>
               <th onClick={() => handleSort('vendor')}>Vendor</th>
               <th onClick={() => handleSort('category')}>Category</th>
@@ -147,7 +148,7 @@ export default function InventorySheet({ activeInventoryId }) {
             { sortedItems &&
             sortedItems.map((i) => (
               <tr key={i.inventory_item_id}>
-              <td>{i.inventory_item_id}</td>
+              <td>{i.product_number}</td>
               <td >{i.name}</td>
               <td>{i.vendor}</td>
               <td>{i.category}</td>
@@ -166,7 +167,7 @@ export default function InventorySheet({ activeInventoryId }) {
                 </td>
                 <td>$ {i.total}</td>
                 <td><Button
-                  onClick={(e) => showItemDetail(e, i.inventory_item_id)}
+                  onClick={(e) => showItemDetail(e)}
                 >Details</Button></td>
               </tr>
             ))}
