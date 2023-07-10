@@ -40,7 +40,7 @@ export default function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/inventory" element={<InventoryPage />} />
         <Route path="/business" element={<BusinessPage />} />
-        <Route path="/auth" element={<Auth />} />
+        <Route path="/auth" element={<Auth user={user} />} />
         <Route path="/signup" element={<Login />} />
       </Routes>
       : 

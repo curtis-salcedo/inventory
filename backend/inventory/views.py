@@ -126,7 +126,7 @@ def import_products(request):
 
 def proxy_login(request):
     print('Proxy Login request:', request)
-    redirect_url = 'http://localhost:8000/accounts/signup/'
+    redirect_url = 'http://localhost:8000/accounts/login/'
     login_success = True
     if login_success:
         close_script = '''

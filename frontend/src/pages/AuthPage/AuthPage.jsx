@@ -1,30 +1,38 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from 'axios';
+
+// Data Imports
+import { logoutUser } from "../../utilities/users-api"
 
 // Component Imports
 import SignUpForm from '../../components/SignUpForm/SignUpForm';
 import LoginForm from '../../components/LoginForm/LoginForm';
 
+// Style Imports
+import { Button } from 'reactstrap';
 
-export default function AuthPage({ setUser }) {
-  // const [showSignUp, setShowSignUp] = useState(false);  
+
+export default function AuthPage({ user }) {
+
+  const handleLogout = (e) => {
+    e.preventDefault();
+    logoutUser(e);
+  }
 
   return (
     <main>
-        <div className="AuthContainer">
+      { user ?
+      <>
+      <div>User : {user.email}</div>
+        <Button onClick={(e) => handleLogout(e)}>Logout</Button>
+      </>
+      :
+      <>
+        <LoginForm />
+        {/* <SignUpForm /> */}
+      </>
+      }
 
-        <div className="AuthWelcome">Welcome To
-        <div className="AuthNavBarLogo">
-          <span className="AuthNavBarOne">Modern</span> 
-          <span className="AuthNavBarTwo">Menus</span>
-        </div>
-        </div>
-        <div className="SignUp">
-        {/* <button onClick={() => setShowSignUp(!showSignUp)}>{showSignUp ? 'Log In' : 'Sign Up'}</button> */}
-          <LoginForm setUser={setUser} />
-          <SignUpForm />
-        </div>
-          </div>
     </main>
   );
 }
