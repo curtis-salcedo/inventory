@@ -78,7 +78,7 @@ export default function InventoryCountPage() {
     axios
       .get('/api/inventories/')
       .then((res) => {
-        console.log('Inventory Page useEffect axios get', res.data)
+        // console.log('Inventory Page useEffect axios get', res.data)
       })
       .catch((err) => console.log(err));
   }, []);
@@ -110,7 +110,11 @@ export default function InventoryCountPage() {
               <NavLink
                 className={activeLocation === l.location_id ? 'active' : ''}
                 onClick={(e) => handleChange(e, l.location_id)}
-                style={{ cursor: 'pointer' }}
+                style={{
+                  cursor: 'pointer' ,
+                  // backgroundColor: 'coral',
+                }}
+                
               >
                 {l.name}
               </NavLink>

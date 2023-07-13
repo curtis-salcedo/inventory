@@ -3,7 +3,6 @@ import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 // Data Imports
-import { DataContext } from '../../utilities/DataContext';
 import { logoutUser } from '../../utilities/users-api';
 
 // Component Imports
@@ -23,12 +22,10 @@ import {
   Nav,
   NavItem,
   NavLink,
-
-
 } from 'reactstrap';
 
 
-export default function NavBar({ user }) {
+export default function NavBar({ user, business }) {
   const [ dropdownOpen, setDropdownOpen ] = useState(false);
   const [ confirmLogout, setConfirmLogout ] = useState(false);
   const toggle = () => setDropdownOpen(prevState => !prevState);
@@ -37,7 +34,6 @@ export default function NavBar({ user }) {
     e.preventDefault();
     logoutUser(e);
   }
-
 
   return (
   <nav>

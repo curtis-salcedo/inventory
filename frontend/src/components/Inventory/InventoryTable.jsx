@@ -25,10 +25,6 @@ export default function InventoryTable({ handleView, activeLocation }) {
   // Convert the time to a readable format
   function getDate(timestamp) {
     const date = new Date(timestamp)
-    let day = date.getDate()
-    let month = date.getMonth() + 1
-    let year = date.getFullYear()
-    console.log(day, month, year)
     const formatedDate = date.toLocaleTimeString('en-US', { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric' })
     return formatedDate
   }
@@ -44,7 +40,6 @@ export default function InventoryTable({ handleView, activeLocation }) {
       axios
         .get('/api/inventories/')
         .then((res) => {
-          console.log('Inventory Table useEffect axios get', res.data)
           setActiveTabData(res.data)
         })
         .catch((err) => console.log(err));
@@ -52,9 +47,7 @@ export default function InventoryTable({ handleView, activeLocation }) {
       axios
         .get(`/api/inventories/`)
         .then((res) => {
-          console.log('Inventory Table useEffect axios get', res.data)
           const filteredData = res.data.filter((i) => i.location === activeLocation)
-          console.log('filteredData', filteredData)
           setActiveTabData(filteredData)
         })
         .catch((err) => console.log(err));
@@ -100,7 +93,7 @@ export default function InventoryTable({ handleView, activeLocation }) {
                 <td>{getMonthName(inventory.month)}</td>
                 <td>{inventory.year}</td>
                 <td>{inventory.user_email}</td>
-                <td>{inventory.updated_at}</td>
+                <td>{getDate(inventory.updated_at)}</td>
                 <td>
                   <Button
                     color="success"

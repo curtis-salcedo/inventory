@@ -1,5 +1,5 @@
 from rest_framework import serializers, permissions
-from .models import CustomUser, Business, Location, Category, Product, InventoryItem, Inventory, ProductMixTemplate, SubCategory
+from .models import CustomUser, Business, Location, Category, Product, InventoryItem, Inventory, SubCategory
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate
 
@@ -34,10 +34,11 @@ class BusinessSerializer(serializers.ModelSerializer):
         fields = ('business_id', 'name')
 
 class LocationSerializer(serializers.ModelSerializer):
+    business_name = serializers.CharField(source='business.name', read_only=True)
     class Meta:
         permission_classes = [permissions.IsAuthenticated]
         model = Location
-        fields = ('location_id', 'name', 'address', 'business')
+        fields = ('location_id', 'name', 'address', 'business', 'business_name')
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -73,12 +74,6 @@ class InventorySerializer(serializers.ModelSerializer):
         permission_classes = [permissions.IsAuthenticated]
         model = Inventory
         fields = ('inventory_id', 'location', 'created_at', 'updated_at', 'name', 'month', 'year', 'item_list', 'user', 'user_email')
-
-class ProductMixTemplateSerializer(serializers.ModelSerializer):
-    class Meta:
-        permission_classes = [permissions.IsAuthenticated]
-        model = ProductMixTemplate
-        fields = ('product_mix_template_id', 'location_id', 'name', 'description', 'item_list')
 
 class SubCategorySerializer(serializers.ModelSerializer):
     class Meta:

@@ -103,17 +103,6 @@ class InventoryItem(models.Model):
 
     def __str__(self):
         return (f"{self.product.name} - {self.category}")
-
-class ProductMixTemplate(models.Model):
-    product_mix_template_id = models.AutoField(primary_key=True)
-    location_id  = models.ForeignKey(Location, on_delete=models.CASCADE, related_name = 'productmixtemplates')
-    location_name = models.CharField(max_length=100, null=True)
-    name = models.CharField(max_length=100, null=True)
-    description = models.CharField(max_length=100, null=True)
-    item_list = models.ManyToManyField(InventoryItem, related_name='productmixtemplates')
-
-    def __str__(self):
-        return self.name
     
 # Inventory Model
 class Inventory(models.Model):

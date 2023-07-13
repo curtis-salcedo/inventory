@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser, Business, Location, Category, Product, InventoryItem, Inventory, ProductMixTemplate, SubCategory, InventorySubmission
+from .models import CustomUser, Business, Location, Category, Product, InventoryItem, Inventory, SubCategory
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 
 class CustomUserAdmin(UserAdmin):
@@ -44,9 +44,6 @@ class InventoryItemAdmin(admin.ModelAdmin):
 class InventoryAdmin(admin.ModelAdmin):
     list = ('location', 'product', 'quantity', 'total', 'created_at', 'updated_at')
 
-class ProductMixTemplateAdmin(admin.ModelAdmin):
-    list = ('business', 'name', 'created_at', 'updated_at', 'description', 'item_list')
-
 class SubCategoryAdmin(admin.ModelAdmin):
     list = ('name', 'category')
 
@@ -60,6 +57,5 @@ admin.site.register(Category, CategoryAdmin)
 admin.site.register(Product, ProductAdmin)
 admin.site.register(InventoryItem, InventoryItemAdmin)
 admin.site.register(Inventory, InventoryAdmin)
-admin.site.register(ProductMixTemplate, ProductMixTemplateAdmin)
 admin.site.register(SubCategory, SubCategoryAdmin)
 

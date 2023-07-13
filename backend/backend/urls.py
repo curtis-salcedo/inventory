@@ -29,7 +29,6 @@ router.register('categories', views.CategoryView)
 router.register('products', views.ProductView)
 router.register('inventory_items', views.InventoryItemView)
 router.register('inventories', views.InventoryView)
-router.register('product_mix', views.ProductMixTemplateView)
 router.register('sub_categories', views.SubCategoryView)
 
 urlpatterns = [

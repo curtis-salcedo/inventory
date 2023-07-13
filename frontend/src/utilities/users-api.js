@@ -21,7 +21,7 @@ export function signUp() {
   axios
     .post('/api/signup/')
     .then((res) => {
-      console.log(res.data)
+      console.log('SignUp User', res.data)
       window.location.reload();
     }
   )
@@ -32,7 +32,7 @@ export function logoutUser(e) {
   axios
     .post('/api/logout/', null, { withCredentials: true })
     .then((res) => {
-      console.log(res.data)
+      console.log('Logout User', res.data)
       window.location.reload();
     })
 }

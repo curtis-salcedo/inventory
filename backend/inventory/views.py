@@ -12,9 +12,9 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import viewsets, status
 
-from .serializers import CustomUserSerializer, BusinessSerializer, LocationSerializer, CategorySerializer, ProductSerializer, InventoryItemSerializer, InventorySerializer, ProductMixTemplateSerializer, SubCategorySerializer
+from .serializers import CustomUserSerializer, BusinessSerializer, LocationSerializer, CategorySerializer, ProductSerializer, InventoryItemSerializer, InventorySerializer, SubCategorySerializer
 
-from .models import CustomUser, Business, Location, Category, Product, InventoryItem, Inventory, ProductMixTemplate, SubCategory
+from .models import CustomUser, Business, Location, Category, Product, InventoryItem, Inventory, SubCategory
 
 import json, csv
 # Create your views here.
@@ -45,10 +45,6 @@ class InventoryItemView(viewsets.ModelViewSet):
 class InventoryView(viewsets.ModelViewSet):
     serializer_class = InventorySerializer
     queryset = Inventory.objects.all()
-
-class ProductMixTemplateView(viewsets.ModelViewSet):
-    serializer_class = ProductMixTemplateSerializer
-    queryset = ProductMixTemplate.objects.all()
 
 class SubCategoryView(viewsets.ModelViewSet):
     serializer_class = SubCategorySerializer

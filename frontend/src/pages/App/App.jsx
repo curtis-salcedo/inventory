@@ -26,7 +26,7 @@ export default function App() {
     async function fetchUser() {
       const userData = await getUser();
       setUser(userData);
-      console.log('userData', userData)
+      // console.log('userData', userData)
     }
     fetchUser();
   }, []);
@@ -40,7 +40,7 @@ export default function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/inventory" element={<InventoryPage />} />
         <Route path="/business" element={<BusinessPage />} />
-        <Route path="/auth" element={<Auth user={user} />} />
+        <Route path="/auth" element={<Auth user={user} business={business} />} />
         <Route path="/signup" element={<Login />} />
       </Routes>
       : 

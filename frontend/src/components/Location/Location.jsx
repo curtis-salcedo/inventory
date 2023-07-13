@@ -20,6 +20,8 @@ import {
   Button,
   Row,
   Container,
+  Table,
+
 } from 'reactstrap';
 
 import '../Components.css'
@@ -61,27 +63,6 @@ export default function Location() {
       .catch((err) => console.log(err));
   };
 
-  const handleDelete = (location) => {
-    axios
-      .delete(`/api/locations/${location.id}`)
-      .then((res) => refreshList());
-  };
-
-  const handleCreate = () => {
-    const location = {
-      business: business.id,
-      name: '',
-      address: '',
-    };
-    setActiveItem(location);
-    setModal(!modal);
-  };
-
-  const handleEdit = (location) => {
-    setActiveItem(location);
-    setModal(!modal);
-  };
-
   const showModal = () => {
     setActiveItem({
       business: business,
@@ -108,9 +89,25 @@ export default function Location() {
                   }}
                 >
                   <CardBody>
-                    <CardHeader className='custom-card-header'>{location.business}</CardHeader>
-                    <CardTitle tag="h5">{location.name}</CardTitle>
+                    <CardHeader className='custom-card-header'>{location.business_name}</CardHeader>
+                    <CardTitle>{location.name}</CardTitle>
                     <CardText>Address: {location.address}</CardText>
+                    <CardText>
+                      <Table>
+                        <thead>
+                          <tr>
+                            <th>Latest Inventories</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>
+                              <Button>View</Button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </Table>
+                    </CardText>
                     <CardFooter className='custom-card-footer'>
                       <Button>More</Button>
                     </CardFooter>

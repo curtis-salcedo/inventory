@@ -5,9 +5,6 @@ import axios from 'axios';
 import { DataContext } from '../../utilities/DataContext';
 
 // Component Imports
-import Category from '../../components/Category/Category';
-import Product from '../../components/Product/Product';
-import Location from '../../components/Location/Location';
 import BusinessMenu from '../../components/Business/BusinessMenu';
 
 // Styling Imports
@@ -64,15 +61,6 @@ export default function BusinessPage() {
 
       <div>Business Menu</div>
       <BusinessMenu />
-
-      {/* <div>Manage Locations</div>
-      <Location />
-
-      <div>Manage Category</div>
-      <Category />
-
-      <div>Manage Products</div>
-      <Product /> */}
 
       <div>Import CSV</div>
       {/* <input type="file" id="csvImport" accept="csv" onChange={handleChange} /> */}
