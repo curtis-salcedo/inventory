@@ -1,13 +1,66 @@
-import React from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import axios from 'axios';
 
 // Data Imports
 import { DataContext } from '../../utilities/DataContext';
 
 // Style Imports
-import { Table } from 'reactstrap';
+import {
+  Table,
+  Button,
+} from 'reactstrap';
 
-export default function InventoryTable() {
+export default function InventoryTable({ handleView, activeLocation }) {
   const { inventory, locations } = useContext(DataContext);
+  const [ activeInventory, setActiveInventory ] = useState([])
+  const [ activeTabData, setActiveTabData ] = useState([])
+
+  // Convert Month to long form
+  function getMonthName(monthNumber) {
+    const date = new Date();
+    date.setMonth(monthNumber - 1);
+    return date.toLocaleString('en-US', { month: 'long' });
+  }
+
+  // Convert the time to a readable format
+  function getDate(timestamp) {
+    const date = new Date(timestamp)
+    let day = date.getDate()
+    let month = date.getMonth() + 1
+    let year = date.getFullYear()
+    console.log(day, month, year)
+    const formatedDate = date.toLocaleTimeString('en-US', { day: 'numeric', month: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric' })
+    return formatedDate
+  }
+
+  // Populate the correct location name
+  function getLocationName(id) {
+    const location = locations.find((l) => l.location_id === id)
+    return location.name
+  }
+
+  useEffect(() => {
+    if (activeLocation === 'all') {
+      axios
+        .get('/api/inventories/')
+        .then((res) => {
+          console.log('Inventory Table useEffect axios get', res.data)
+          setActiveTabData(res.data)
+        })
+        .catch((err) => console.log(err));
+    } else {
+      axios
+        .get(`/api/inventories/`)
+        .then((res) => {
+          console.log('Inventory Table useEffect axios get', res.data)
+          const filteredData = res.data.filter((i) => i.location === activeLocation)
+          console.log('filteredData', filteredData)
+          setActiveTabData(filteredData)
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [activeLocation]);
+
 
   return (
     <Table>
@@ -16,30 +69,50 @@ export default function InventoryTable() {
           <th>Location</th>
           <th>Month</th>
           <th>Year</th>
-          <th>Counted By</th>
-          <th>Submitted On</th>
+          <th>Created By</th>
+          <th>Last Updated</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
-        {inventory.map((inventory) => (
-          <tr key={inventory.id}>
-            <td>{inventory.location}</td>
-            <td>{inventory.month}</td>
-            <td>{inventory.year}</td>
-            <td>{inventory.counted_by}</td>
-            <td>{inventory.submitted_on}</td>
-            <td>
-              <Button
-                color="success"
-                size="sm"
-                onClick={(e) => handleView(e, inventory.id)}
-              >
-                View
-              </Button>
-            </td>
-          </tr>
-        ))}
+        {activeLocation === 'all'
+          ? inventory.map((inventory) => (
+              <tr key={inventory.inventory_id}>
+                <td>{getLocationName(inventory.location)}</td>
+                <td>{getMonthName(inventory.month)}</td>
+                <td>{inventory.year}</td>
+                <td>{inventory.user_email}</td>
+                <td>{getDate(inventory.updated_at)}</td>
+                <td>
+                  <Button
+                    color="success"
+                    size="sm"
+                    onClick={(e) => handleView(e, inventory.inventory_id)}
+                  >
+                    Open
+                  </Button>
+                </td>
+              </tr>
+            ))
+          : activeTabData.map((inventory) => (
+              <tr key={inventory.inventory_id}>
+                <td>{getLocationName(inventory.location)}</td>
+                <td>{getMonthName(inventory.month)}</td>
+                <td>{inventory.year}</td>
+                <td>{inventory.user_email}</td>
+                <td>{inventory.updated_at}</td>
+                <td>
+                  <Button
+                    color="success"
+                    size="sm"
+                    onClick={(e) => handleView(e, inventory.inventory_id)}
+                  >
+                    Open
+                  </Button>
+                </td>
+              </tr>
+            ))
+        }
       </tbody>
     </Table>
   )

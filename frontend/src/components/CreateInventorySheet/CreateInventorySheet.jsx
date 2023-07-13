@@ -16,7 +16,7 @@ import {
 
 export default function CreateInventorySheet({ handleShowCreateInventoryShell }) {
   // Data from DataContext.js file
-  const { locations, products, inventoryItems, inventory } = useContext(DataContext);
+  const { locations, products, inventoryItems, inventory, user } = useContext(DataContext);
   // Lists used to populate data for the form
   const [locationList, setLocationList] = useState([]);
   const [inventoryList, setInventoryList] = useState([]);
@@ -33,6 +33,7 @@ export default function CreateInventorySheet({ handleShowCreateInventoryShell })
     name: "",
     month: "",
     year: "",
+    user: user.email,
   });
   
   // Create InventoryItem's based on every product in the productList by setting a checkbox to true
@@ -50,7 +51,7 @@ export default function CreateInventorySheet({ handleShowCreateInventoryShell })
     setProductList(products)
 
     // Generate the name for the inventory shell based on location and date
-    const inventoryName = `${activeInventory.location}-${activeInventory.month}${activeInventory.year}`;
+    const inventoryName = `${activeInventory.location}-${activeInventory.month}${activeInventory.year.slice(2)}`;
 
     // Find the location object that matches the location name and return the location_id as a number
     const matchLocation = locations.filter(
@@ -67,6 +68,9 @@ export default function CreateInventorySheet({ handleShowCreateInventoryShell })
     const inventoryData = {
       location: matchLocation.location_id,
       name: inventoryName,
+      month: activeInventory.month,
+      year: activeInventory.year,
+      user: user.email,
     };
 
     console.log(inventoryData)
@@ -128,12 +132,12 @@ export default function CreateInventorySheet({ handleShowCreateInventoryShell })
           <Label for="year">Year</Label>
           <Input type="select" name="year" id="year" onChange={handleChange}>
             <option value="null">Select Year</option>
-            <option value="23">2023</option>
-            <option value="24">2024</option>
-            <option value="25">2025</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
           </Input>
         </FormGroup>
-        <Button onClick={() => createInventory()}>Create Inventory Sheet</Button>
+        <Button onClick={(e) => createInventory(e)}>Create Inventory Sheet</Button>
       </Form>
     </main>
   )

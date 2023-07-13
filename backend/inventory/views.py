@@ -199,26 +199,26 @@ def signup(request):
 
 @api_view(['POST'])
 def create_inventory(request):
-    request.data['created_at'] = timezone.now()
-    request.data['month'] = timezone.now().month
-    request.data['year'] = timezone.now().year
+    print("Request data:", request.data)
+    month = int(request.data['month'])
+    year = int(request.data['year'])
+    print( request.data['user'] )
     location_id = request.data['location']
-    print('location', location_id)
     # find the location
     foundLocation = Location.objects.get(location_id=location_id)
     new_inventory = Inventory.objects.create(
         location=foundLocation,
-        created_at=request.data['created_at'],
-        month=request.data['month'],
-        year=request.data['year'],
+        created_at=timezone.now(),
+        month=month,
+        year=year,
         name=request.data['name'],
+        user=request.user,
     )
     new_inventory.save()
     print(f"New inventory created with the name of {new_inventory.name} and the id of: {new_inventory.inventory_id}")
     # Automatically create items based on the list of products and push into the inventory under item_list
     items = auto_create_inventory_list(new_inventory.inventory_id)
     for item in items:
-        print(item)
         new_inventory.item_list.add(item)
         new_inventory.save()
     print("New inventory item list:", new_inventory.item_list)
@@ -239,7 +239,7 @@ def auto_create_inventory_list(inventory_id):
             price=product.price
         )
         items.append(inventory_item)
-        print(f"The following inventory items were created: {items}")
+        # print(f"The following inventory items were created: {items}")
     return items
 
 

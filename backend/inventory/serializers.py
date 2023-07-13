@@ -68,10 +68,11 @@ class InventoryItemSerializer(serializers.ModelSerializer):
         return {key: value.upper() if isinstance(value, str) else value for key, value in representation.items()}
 
 class InventorySerializer(serializers.ModelSerializer):
+    user_email = serializers.CharField(source='user.email', read_only=True)
     class Meta:
         permission_classes = [permissions.IsAuthenticated]
         model = Inventory
-        fields = ('inventory_id', 'location', 'created_at', 'updated_at', 'name', 'month', 'year', 'item_list')
+        fields = ('inventory_id', 'location', 'created_at', 'updated_at', 'name', 'month', 'year', 'item_list', 'user', 'user_email')
 
 class ProductMixTemplateSerializer(serializers.ModelSerializer):
     class Meta:

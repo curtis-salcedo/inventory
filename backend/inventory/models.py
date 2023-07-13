@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 
 from .managers import CustomUserManager
 
@@ -27,7 +29,7 @@ class Business(models.Model):
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=255, null=True)
-    business = models.ForeignKey(Business, on_delete=models.CASCADE, related_name='users', null=True)
+    business = models.ForeignKey(Business, on_delete=models.SET_NULL, related_name='users', null=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
@@ -112,21 +114,32 @@ class ProductMixTemplate(models.Model):
 
     def __str__(self):
         return self.name
-
+    
 # Inventory Model
 class Inventory(models.Model):
     inventory_id = models.AutoField(primary_key=True)
-    inventory_items = models.ManyToManyField(InventoryItem, related_name='inventories')
+    # inventory_items = models.ManyToManyField(InventoryItem, related_name='inventories')
     location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='inventoryshell')
     month = models.CharField(max_length=100, null=True)
     year = models.CharField(max_length=100, null=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
     name = models.CharField(max_length=100, unique=True)
-    item_list = models.ManyToManyField(InventoryItem)
+    item_list = models.ManyToManyField(InventoryItem, related_name='item_lists')
+    user = models.ForeignKey(CustomUser, related_name='inventories', on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.name
+    
+@receiver(pre_delete, sender=Inventory)
+def delete_inventory_items(sender, instance, **kwargs):
+    # Delete associated InventoryItem objects
+    item_list = instance.item_list.all()
+    for item in item_list:
+        print(item)
+        item.delete()
+
+
 
 class InventorySubmission(models.Model):
     submission_id = models.AutoField(primary_key=True)

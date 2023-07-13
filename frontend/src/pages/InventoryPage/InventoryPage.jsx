@@ -7,7 +7,7 @@ import { DataContext } from '../../utilities/DataContext';
 // Component Imports
 import CreateInventorySheet from '../../components/CreateInventorySheet/CreateInventorySheet';
 import InventorySheet from '../../components/InventorySheet/InventorySheet';
-import Location from '../../components/Location/Location';
+import InventoryTable from '../../components/Inventory/InventoryTable';
 
 // Styling Imports
 import {
@@ -22,6 +22,9 @@ import {
   Col,
   Container,
   Row,
+  Nav,
+  NavItem,
+  NavLink,
 } from 'reactstrap';
 
 import '../../components/Components.css'
@@ -31,14 +34,14 @@ axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.xsrfCookieName = "csrftoken";
 
 export default function InventoryCountPage() {
+  const { inventory, locations } = useContext(DataContext);
   // Show Component Handles
   const [showCreateInventorySheet, setShowCreateInventorySheet] = useState(false);
   const [showInventory, setShowInventory] = useState(false);
   const [activeInventoryId, setActiveInventoryId] = useState([])
-  const [activeLocation, setActiveLocation] = useState(null)
-  console.log(activeLocation)
-  // Data Imports
-  const { inventory, locations } = useContext(DataContext);
+  const [activeLocation, setActiveLocation] = useState([])
+  const [activeTabData, setActiveTabData] = useState(null)
+
 
   const handleShowCreateInventorySheet = () => {
     setShowCreateInventorySheet(!showCreateInventorySheet);
@@ -60,17 +63,18 @@ export default function InventoryCountPage() {
 
   // Convert the date to a readable format
   function convertDateToName(month, year) {
-    const date = new Date(year, month)
+    const date = new Date(year, month - 1)
     const formatedDate = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
     return formatedDate
   }
 
   const handleChange = (e, id) => {
-    console.log(id)
     setActiveLocation(id)
+    setActiveTabData(id)
   }
 
   useEffect(() => {
+    setActiveLocation('all')
     axios
       .get('/api/inventories/')
       .then((res) => {
@@ -81,56 +85,8 @@ export default function InventoryCountPage() {
 
   return (
     <main>
-        <button onClick={() => handleShowCreateInventorySheet()}>Create Inventory Sheet
-        </button>
-      <div>
-
-        <div>View Inventory sheets by location</div>
-        <div>
-          <Container>
-
-          { locations ? 
-            locations.map((l) => (
-              <Button key={l.location_id} onClick={(e) => handleChange(e, l.location_id)}>{l.name}</Button>
-              ))
-              :  <div>No locations added</div>}
-          </Container>
-        </div>
-
-        <div>Add searchable location tabs that populate all inventories for that location.</div>
-        <div>View all Inventory Sheets</div>
-      <Container>
-        <Row className="custom-card-container">
-            { inventory && (
-              inventory.map((i) => (
-          <Col key={i.inventory_id} md={3}>
-              <Card 
-                className="my-2"
-                color="primary"
-                outline
-                style={{
-                  width: '18rem',
-                  height: '10rem'
-                }}
-              >
-                <CardBody>
-                  <CardHeader className='custom-card-header' tag="h5">{i.name.slice(0, -5)}</CardHeader>
-                  <CardTitle tag="h5">{convertDateToName(i.month, i.year)}</CardTitle>
-                  <CardSubtitle tag="h6" className="mb-2"></CardSubtitle>
-                  <CardFooter className="custom-card-footer">
-                    <Button>Edit</Button>
-                    <Button onClick={(e) => handleView(e, i.inventory_id)}>View</Button>
-                  </CardFooter>
-              </CardBody>
-            </Card>
-          </Col>
-              ))
-              )
-            }
-        </Row>
-      </Container>
-      </div>
-
+      <Button color='primary' onClick={() => handleShowCreateInventorySheet()}>Create Inventory Sheet
+      </Button>
       <div>
         { showCreateInventorySheet ? (
           <CreateInventorySheet
@@ -138,7 +94,33 @@ export default function InventoryCountPage() {
           ) : ( null
         )}
       </div>
-      
+      <div>
+      <Nav tabs>
+          <NavItem>
+            <NavLink
+              className={activeLocation === 'all' ? 'active' : ''}
+              onClick={(e) => handleChange(e, 'all')}
+              style={{ cursor: 'pointer' }}
+            >
+              All
+            </NavLink>
+          </NavItem>
+          {locations && locations.map((l) => (
+            <NavItem key={l.location_id}>
+              <NavLink
+                className={activeLocation === l.location_id ? 'active' : ''}
+                onClick={(e) => handleChange(e, l.location_id)}
+                style={{ cursor: 'pointer' }}
+              >
+                {l.name}
+              </NavLink>
+            </NavItem>
+          ))}
+        </Nav>
+      </div>
+
+      <InventoryTable handleView={handleView} activeLocation={activeLocation} />
+
       <div>
         { showInventory ? (
           <InventorySheet

@@ -13,6 +13,7 @@ import {
   FormGroup,
   Input,
   Label,
+  Table,
 } from "reactstrap";
 
 
@@ -129,7 +130,7 @@ export default function InventorySheet({ inventoryId }) {
         
       </div>
       <Form>
-        <table>
+        <Table striped>
           <thead>
             <tr>
               <th onClick={() => handleSort('inventory_item_id')}>Product Number</th>
@@ -182,7 +183,7 @@ export default function InventorySheet({ inventoryId }) {
               </tr>
             }
           </tbody>
-        </table>
+        </Table>
       </Form>
     </div>
   )
