@@ -10,6 +10,7 @@ import LocationModal from './LocationModal'
 // Styling Imports
 import {
   Card,
+  CardHeader,
   CardBody,
   CardTitle,
   CardText,
@@ -20,6 +21,8 @@ import {
   Row,
   Container,
 } from 'reactstrap';
+
+import '../Components.css'
 
 export default function Location() {
   const { locations, business, setLocations, user } = useContext(DataContext);
@@ -92,17 +95,23 @@ export default function Location() {
     <main>
       <Container>
         <Button onClick={() => showModal()}>Add Location</Button>
-        <Row>
+        <Row className="custom-card-container">
           {locations ? (
             locations.map((location, index) => (
               <Col md={3} key={index}>
-                <Card>
+                <Card
+                  className="my-2"
+                  color="primary"
+                  outline
+                  style={{
+                    width: '18rem'
+                  }}
+                >
                   <CardBody>
+                    <CardHeader className='custom-card-header'>{location.business}</CardHeader>
                     <CardTitle tag="h5">{location.name}</CardTitle>
-                    <CardSubtitle tag="h6" className="mb-2 text-muted">
-                    </CardSubtitle>
-                    <CardText>{location.address}</CardText>
-                    <CardFooter>
+                    <CardText>Address: {location.address}</CardText>
+                    <CardFooter className='custom-card-footer'>
                       <Button>More</Button>
                     </CardFooter>
                   </CardBody>

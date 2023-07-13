@@ -131,7 +131,12 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'inventory',
-    }
+        # 'NAME': os.environ.get('GOOGLE_DB_NAME'),
+        # 'HOST': os.environ.get('GOOGLE_HOST'),
+        # 'USER': os.environ.get('GOOGLE_USER'),
+        # 'PASSWORD': os.environ.get('GOOGLE_PASSWORD'),
+        # 'PORT': os.environ.get('GOOGLE_PORT'),
+    },
 }
 
 

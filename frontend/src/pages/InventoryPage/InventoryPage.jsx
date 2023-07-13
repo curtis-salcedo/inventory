@@ -7,6 +7,7 @@ import { DataContext } from '../../utilities/DataContext';
 // Component Imports
 import CreateInventorySheet from '../../components/CreateInventorySheet/CreateInventorySheet';
 import InventorySheet from '../../components/InventorySheet/InventorySheet';
+import Location from '../../components/Location/Location';
 
 // Styling Imports
 import {
@@ -14,28 +15,30 @@ import {
   Card,
   CardBody,
   CardTitle,
+  CardHeader,
   CardSubtitle,
   CardText,
   CardFooter,
   Col,
   Container,
   Row,
-
 } from 'reactstrap';
+
+import '../../components/Components.css'
 
 // Axios CSRF Token Setup
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.xsrfCookieName = "csrftoken";
 
 export default function InventoryCountPage() {
-  
   // Show Component Handles
   const [showCreateInventorySheet, setShowCreateInventorySheet] = useState(false);
   const [showInventory, setShowInventory] = useState(false);
   const [activeInventoryId, setActiveInventoryId] = useState([])
-
+  const [activeLocation, setActiveLocation] = useState(null)
+  console.log(activeLocation)
   // Data Imports
-  const { inventory } = useContext(DataContext);
+  const { inventory, locations } = useContext(DataContext);
 
   const handleShowCreateInventorySheet = () => {
     setShowCreateInventorySheet(!showCreateInventorySheet);
@@ -55,6 +58,18 @@ export default function InventoryCountPage() {
     setShowInventory(!showInventory)
   }
 
+  // Convert the date to a readable format
+  function convertDateToName(month, year) {
+    const date = new Date(year, month)
+    const formatedDate = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+    return formatedDate
+  }
+
+  const handleChange = (e, id) => {
+    console.log(id)
+    setActiveLocation(id)
+  }
+
   useEffect(() => {
     axios
       .get('/api/inventories/')
@@ -68,34 +83,41 @@ export default function InventoryCountPage() {
     <main>
         <button onClick={() => handleShowCreateInventorySheet()}>Create Inventory Sheet
         </button>
-  
-      {/* <div>
-        { inventory.map((i) => (
-          <Button
-          key={i.inventory_id}
-          value={i.inventory_id}
-          name="inventory_id"
-          onClick={(e) => handleSelectInventory(e, i.inventory_id)}
-          >
-            {i.name}
-          </Button>
-        )
-        )}
-      </div> */}
-
       <div>
+
+        <div>View Inventory sheets by location</div>
+        <div>
+          <Container>
+
+          { locations ? 
+            locations.map((l) => (
+              <Button key={l.location_id} onClick={(e) => handleChange(e, l.location_id)}>{l.name}</Button>
+              ))
+              :  <div>No locations added</div>}
+          </Container>
+        </div>
+
+        <div>Add searchable location tabs that populate all inventories for that location.</div>
+        <div>View all Inventory Sheets</div>
       <Container>
-        <Row>
+        <Row className="custom-card-container">
             { inventory && (
               inventory.map((i) => (
           <Col key={i.inventory_id} md={3}>
-              <Card >
+              <Card 
+                className="my-2"
+                color="primary"
+                outline
+                style={{
+                  width: '18rem',
+                  height: '10rem'
+                }}
+              >
                 <CardBody>
-                  <CardTitle tag="h5">{i.name}</CardTitle>
-                  <CardSubtitle tag="h6" className="mb-2 text-muted">{i.name}</CardSubtitle>
-                  <CardText>Location: {i.location}</CardText>
-                  <CardText>Time: {i.month} / {i.year} </CardText>
-                  <CardFooter>
+                  <CardHeader className='custom-card-header' tag="h5">{i.name.slice(0, -5)}</CardHeader>
+                  <CardTitle tag="h5">{convertDateToName(i.month, i.year)}</CardTitle>
+                  <CardSubtitle tag="h6" className="mb-2"></CardSubtitle>
+                  <CardFooter className="custom-card-footer">
                     <Button>Edit</Button>
                     <Button onClick={(e) => handleView(e, i.inventory_id)}>View</Button>
                   </CardFooter>

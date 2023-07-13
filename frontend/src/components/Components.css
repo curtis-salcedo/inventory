@@ -1,0 +1,17 @@
+.custom-card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+}
+
+.custom-card-body {
+  display: flex;
+  margin: 0;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.custom-card-footer {
+  margin-top: 0 auto;
+  display: flex;
+  justify-content: space-around;
+}
