@@ -56,14 +56,12 @@ urlpatterns = [
     path('api/data/import/products', views.import_products, name='import_products'),
     path('api/data/export/inventories', views.export_inventory, name='export_inventory'),
 
+    # Business URLs
+    path('api/businesses/users', views.get_business_users, name='get_business_users'),
+
     # Inventory URLs
     path('api/inventory/create/', views.create_inventory, name='create_inventory'),
     path('api/inventory/update/<int:id>', views.update_inventory_sheet, name='update_inventory_sheet'),
-
-    # Product Mix URLs
-    path('api/create_product_mix/', views.create_product_mix, name='create_product_mix'),
-    path('api/update_product_mix_items/', views.update_product_mix_items, name='update_product_mix_items'),
-    path('api/get_product_mix_items/', views.get_product_mix_items, name='get_product_mix_items'),
 
     # Inventory Item URLs
     path('api/inventory/items/find', views.find_inventory_item, name='find_inventory_item'),

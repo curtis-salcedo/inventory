@@ -28,10 +28,11 @@ class LoginSerializer(serializers.Serializer):
         return attrs
 
 class BusinessSerializer(serializers.ModelSerializer):
+    users_data = CustomUserSerializer(many=True, read_only=True, source='users')
     class Meta:
         permission_classes = [permissions.IsAuthenticated]
         model = Business
-        fields = ('business_id', 'name')
+        fields = ('business_id', 'name', 'users', 'users_data')
 
 class LocationSerializer(serializers.ModelSerializer):
     business_name = serializers.CharField(source='business.name', read_only=True)

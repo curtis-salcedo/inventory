@@ -75,7 +75,6 @@ export default function Location() {
   return ( 
     <main>
       <Container>
-        <Button onClick={() => showModal()}>Add Location</Button>
         <Row className="custom-card-container">
           {locations ? (
             locations.map((location, index) => (
@@ -115,9 +114,36 @@ export default function Location() {
                 </Card>
               </Col>
             ))
+            
+
             ) : (
             <div>Loading...</div>
             )}
+            <Col>
+              <Card
+                className="my-2"
+                color="primary"
+                outline
+                style={{
+                  width: '18rem',
+                  height: '12rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  backgroundColor: '#f8f9fa',
+                }}
+              >
+                <CardBody
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                  }}
+                >
+                  <Button color='primary' size="lg" onClick={() => showModal()}>Add Location</Button>
+                </CardBody>
+              </Card>
+            </Col>
         </Row>
       </Container>
       {modal ? (

@@ -21,6 +21,7 @@ class OAuthApplication(models.Model):
 class Business(models.Model):
     business_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100, unique=True)
+    users = models.ManyToManyField('CustomUser', related_name='businesses_customuser')
 
     def __str__(self):
         return self.name
@@ -29,7 +30,7 @@ class Business(models.Model):
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=255, null=True)
-    business = models.ForeignKey(Business, on_delete=models.SET_NULL, related_name='users', null=True)
+    business = models.ForeignKey(Business, on_delete=models.SET_NULL, related_name='customusers', null=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)

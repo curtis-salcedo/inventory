@@ -46,9 +46,10 @@ export default function BusinessMenu() {
 
   return (
     <>
-    <Button value="location" onClick={(e) => handleShow(e)}>Show Locations</Button>
-    <Button value="category" onClick={(e) => handleShow(e)}>Show Categories</Button>
-    <Button value="product" onClick={(e) => handleShow(e)}>Show Products</Button>
+    <Button value="location" color='primary' onClick={(e) => handleShow(e)}>Show Locations</Button>
+    <Button value="category" color='primary' onClick={(e) => handleShow(e)}>Show Categories</Button>
+    <Button value="product" color='primary' onClick={(e) => handleShow(e)}>Show Products</Button>
+    <Button value="users" color='primary' onClick={(e) => handleShow(e)}>Show Users</Button>
 
     <div>
 
@@ -63,7 +64,6 @@ export default function BusinessMenu() {
     { showProduct ?
       <Product />
     : null }
-
 
     </div>
 

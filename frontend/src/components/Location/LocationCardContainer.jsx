@@ -59,7 +59,7 @@ export default function LocationCardContainer() {
                 <CardSubtitle tag="h6" className="mb-2"></CardSubtitle>
                 <CardFooter className="custom-card-footer">
                   <Button>Edit</Button>
-                  <Button onClick={(e) => handleView(e, i.inventory_id)}>View</Button>
+                  <Button color='primary' onClick={(e) => handleView(e, i.inventory_id)}>View</Button>
                 </CardFooter>
             </CardBody>
           </Card>

@@ -7,6 +7,7 @@ import { DataContext } from '../../utilities/DataContext';
 // Component Imports
 import BusinessMenu from '../../components/Business/BusinessMenu';
 import InportCSV from '../../components/ImportCSV/ImportCSV';
+import UsersTable from '../../components/Users/UsersTable';
 
 // Styling Imports
 import { Form,
@@ -21,19 +22,19 @@ axios.defaults.xsrfCookieName = "csrftoken";
 
 
 export default function BusinessPage() {
-  const { business } = useContext(DataContext);
+  const { business, users } = useContext(DataContext);
 
   useEffect(() => {
 
   }, [business]);
-
-  console.log('BusinessPage', business)
 
   return (
     <main>
 
       <div>Business Menu</div>
       <BusinessMenu />
+
+      <UsersTable />
       
     </main>
   );
