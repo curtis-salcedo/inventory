@@ -4,16 +4,19 @@ import React, { useState } from 'react';
 import Category from '../Category/Category';
 import Location from '../Location/Location';
 import Product from '../Product/Product';
+import Users from '../Users/UsersTable';
 
 // Styling Imports
 import {
   Button,
+  ButtonGroup,
 } from 'reactstrap';
 
 export default function BusinessMenu() {
   const [showLocation, setShowLocation] = useState(false);
   const [showCategory, setShowCategory] = useState(false);
-  const [showProduct, setShowProduct] = useState(false);
+  const [showProduct, setShowProduct] = useState(true);
+  const [showUsers, setShowUsers] = useState(false);
 
   const handleShow = (e) => {
     if (e.target.value === "location") {
@@ -23,6 +26,7 @@ export default function BusinessMenu() {
         setShowLocation(true);
         setShowCategory(false);
         setShowProduct(false);
+        setShowUsers(false)
       }
     } else if (e.target.value === "category") {
       if (showCategory === true) {
@@ -31,6 +35,7 @@ export default function BusinessMenu() {
         setShowLocation(false);
         setShowCategory(true);
         setShowProduct(false);
+        setShowUsers(false)
       }
     } else if (e.target.value === "product") {
       if (showProduct === true) {
@@ -39,6 +44,16 @@ export default function BusinessMenu() {
         setShowLocation(false);
         setShowCategory(false);
         setShowProduct(true);
+        setShowUsers(false)
+      }
+    } else if (e.target.value === "users") {
+      if (showUsers === true) {
+        setShowUsers(false);
+      } else {
+        setShowLocation(false);
+        setShowCategory(false);
+        setShowProduct(false);
+        setShowUsers(true);
       }
   }
 }
@@ -46,10 +61,25 @@ export default function BusinessMenu() {
 
   return (
     <>
-    <Button value="location" color='primary' onClick={(e) => handleShow(e)}>Show Locations</Button>
-    <Button value="category" color='primary' onClick={(e) => handleShow(e)}>Show Categories</Button>
-    <Button value="product" color='primary' onClick={(e) => handleShow(e)}>Show Products</Button>
-    <Button value="users" color='primary' onClick={(e) => handleShow(e)}>Show Users</Button>
+    <div className='button-group'>
+
+      <ButtonGroup className='me-2'>
+        <Button value="location" color='primary' onClick={(e) => handleShow(e)}>Locations</Button>
+      </ButtonGroup>
+
+      <ButtonGroup className='me-2'>
+        <Button value="category" color='primary' onClick={(e) => handleShow(e)}>Categories</Button>
+      </ButtonGroup>
+
+      <ButtonGroup className='me-2'>
+        <Button value="product" color='primary' onClick={(e) => handleShow(e)}>Products</Button>
+      </ButtonGroup>
+
+      <ButtonGroup className='me-2'>
+        <Button value="users" color='primary' onClick={(e) => handleShow(e)}>Users</Button>
+      </ButtonGroup>
+
+    </div>
 
     <div>
 
@@ -63,6 +93,10 @@ export default function BusinessMenu() {
 
     { showProduct ?
       <Product />
+    : null }
+
+    { showUsers ?
+      <Users />
     : null }
 
     </div>

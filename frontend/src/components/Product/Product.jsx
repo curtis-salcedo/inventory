@@ -6,6 +6,7 @@ import { DataContext } from '../../utilities/DataContext';
 
 // Component Imports
 import ProductTable from './ProductTable';
+import ImportCSV from '../ImportCSV/ImportCSV';
 
 // Styling Imports
 import {
@@ -14,15 +15,19 @@ import {
 
 export default function Product() {
   const { products } = useContext(DataContext);
-
+  const [ showImportCSV, setShowImportCSV ] = useState(false);
+  // Import CSV File show component
 
   return ( 
     <main>
+      { showImportCSV ? <ImportCSV /> : null}
 
-    <ProductTable
-      products={products}
+      <ProductTable
+        products={products}
+        showImportCSV={showImportCSV}
+        setShowImportCSV={setShowImportCSV}
       />
 
-      </main>
+    </main>
   )
 }

@@ -10,6 +10,7 @@ import InportCSV from '../../components/ImportCSV/ImportCSV';
 import UsersTable from '../../components/Users/UsersTable';
 
 // Styling Imports
+import './BusinessPage.css'
 import { Form,
   FormGroup,
   Button,
@@ -25,16 +26,13 @@ export default function BusinessPage() {
   const { business, users } = useContext(DataContext);
 
   useEffect(() => {
-
   }, [business]);
 
   return (
     <main>
 
-      <div>Business Menu</div>
+      <h1 className='business-page-title'>{business.name} Business Page</h1>
       <BusinessMenu />
-
-      <UsersTable />
       
     </main>
   );

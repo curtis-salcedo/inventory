@@ -15,3 +15,26 @@
   display: flex;
   justify-content: space-around;
 }
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  margin: .5rem;
+}
+
+.category-card {
+  width: 18rem;
+  margin-right: .5rem;
+  margin-left: .5rem;
+}
+
+.category-card-button-group {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin: .5rem;
+}
+
+.category-container {
+  margin-bottom: 1rem;
+}

@@ -15,7 +15,6 @@ import Auth from "../AuthPage/AuthPage";
 // Component Imports
 import NavBar from "../../components/NavBar/NavBar";
 import Login from "../../components/LoginForm/LoginForm";
-import Register from "../../components/SignUpForm/SignUpForm";
 import AuthPage from "../AuthPage/AuthPage";
 
 
@@ -43,7 +42,7 @@ export default function App() {
         <Route path="/business" element={<BusinessPage />} />
         <Route path="/auth" element={<Auth user={user} business={business} />} />
         <Route path="/signup" element={<Login />} />
-        <Route path="/inventory/count" element={<InventoryCountPage />} />
+        <Route path="/inventory/count" element={<InventoryCountPage user={user} business={business} />} />
       </Routes>
       : 
         <AuthPage />

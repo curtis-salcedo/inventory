@@ -8,6 +8,7 @@ import { DataContext } from '../../utilities/DataContext';
 import CategoryModal from './CategoryModal'
 
 // Styling Imports
+import '../Components.css'
 import {
   Card,
   CardBody,
@@ -105,29 +106,34 @@ export default function Category() {
   };
 
   return (
-    <main className="container">
+    <main className="category-container">
       <Container>
-        <Button onClick={() => showModal()}>Add Category</Button>
-        <Row>
+        <div className='button-group'>
+          <Button color='success' onClick={() => showModal()}>Add Category</Button>
+        </div>
+        <div className='horizontal-scroll'>
+          <Row>
+            <Col style={{ display:'flex', flexDirection:'row', overflowX:'auto', justifyContent:'center', alignItems:'center' }}>
             { categoryList && (
               categoryList.map((c) => (
-          <Col key={c.category_id} md={3}>
-              <Card >
+              <Card key={c.category_id} md={3} className='category-card'>
                 <CardBody>
-                  <CardTitle tag="h5">{c.name}</CardTitle>
+                  <CardTitle tag="h5">{c.name.toUpperCase()}</CardTitle>
                   <CardSubtitle tag="h6" className="mb-2 text-muted">{c.description}</CardSubtitle>
-                  <CardText>Some Text to go here</CardText>
-                  <CardFooter>
-                    <Button onClick={() => editCategory(c)}>Edit</Button>
-                    <Button>View Products in Category</Button>
+                  <CardText>This is quick access to all the products that are from the {c.name.toUpperCase()} category</CardText>
+                  <CardFooter style={{ backgroundColor:'white'}}>
+                    <div className='category-card-button-group'>
+                      <Button color='success' onClick={() => editCategory(c)}>Edit</Button>
+                      {/* <Button color='success' >Products in Category</Button> */}
+                    </div>
                   </CardFooter>
-              </CardBody>
-            </Card>
-          </Col>
+                </CardBody>
+              </Card>
               ))
-              )
-            }
-        </Row>
+              )}
+            </Col>
+          </Row>
+        </div>
       </Container>
       {modal ? (
         <CategoryModal activeItem={activeItem} toggle={toggle} onSave={handleSubmit} />

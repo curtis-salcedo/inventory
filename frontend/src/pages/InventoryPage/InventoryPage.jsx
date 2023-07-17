@@ -10,6 +10,7 @@ import InventorySheet from '../../components/InventorySheet/InventorySheet';
 import InventoryTable from '../../components/Inventory/InventoryTable';
 
 // Styling Imports
+import './InventoryPage.css'
 import {
   Button,
   Card,
@@ -26,8 +27,6 @@ import {
   NavItem,
   NavLink,
 } from 'reactstrap';
-
-import '../../components/Components.css'
 
 // Axios CSRF Token Setup
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -78,9 +77,17 @@ export default function InventoryCountPage() {
   }, []);
 
   return (
-    <main>
-      <Button color='primary' onClick={() => handleShowCreateInventorySheet()}>Create Inventory Sheet
-      </Button>
+    <main className='inventory-page-container'>
+      <div>
+
+        <Button
+          color='primary'
+          onClick={() => handleShowCreateInventorySheet()}
+          className='inventory-page-button'
+          style={{
+            width: '18rem',
+          }}>Create Inventory Sheet</Button>
+      </div>
       <div>
         { showCreateInventorySheet ? (
           <CreateInventorySheet

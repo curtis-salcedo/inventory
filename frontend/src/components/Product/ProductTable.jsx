@@ -15,7 +15,7 @@ import {
   Button,
 } from 'reactstrap';
 
-export default function ProductTable() {
+export default function ProductTable({ setShowImportCSV, showImportCSV }) {
   const { category } = useContext(DataContext);
   const [products, setProducts] = useState([]);
   const [activeProduct, setActiveProduct] = useState(null);
@@ -125,12 +125,19 @@ export default function ProductTable() {
     refreshList();
   };
 
-  console.log(products[0])
+  const handleShowImport = () => {
+    setShowImportCSV(!showImportCSV);
+
+  };
+
     
   return (
     <>
-      <Button color="primary" size="lg" onClick={handleCreateProduct}>Add Product</Button>
-      <Table hover striped size="sm">
+      <div className='button-group' >
+        <Button color='success' className='button-group' onClick={handleCreateProduct}>Add Product</Button>
+        <Button color='success' className='button-group' onClick={handleShowImport}>Import Data</Button>
+      </div>
+      <Table hover striped size="sm" >
         <thead>
           <tr>
             <th>#</th>
@@ -195,14 +202,13 @@ export default function ProductTable() {
         />
       )}
 
-
-      {/* {showAddProductModal && (
+      {showAddProductModal && (
         <AddProductModal
           activeItem={activeProduct}
           toggle={handleAddProductModal}
           onSave={handleSubmit}
         />
-      )} */}
+      )}
     </>
   );
 };

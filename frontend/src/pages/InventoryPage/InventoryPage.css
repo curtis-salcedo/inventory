@@ -1,0 +1,11 @@
+.inventory-page-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.inventory-page-button {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+}
