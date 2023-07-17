@@ -13,6 +13,7 @@ import {
   FormGroup,
   Input,
   Label,
+  Spinner,
   Table,
 } from "reactstrap";
 
@@ -25,7 +26,7 @@ export default function InventorySheet({ inventoryId }) {
   const [ itemDetail, setItemDetail ] = useState(false)
   const [ currentItem, setCurrentItem ] = useState([])
   const [ activeInventory, setActiveInventory ] = useState([])
-
+  const [ isLoading, setIsLoading ] = useState(true)
   // Sort State
   const [ sortedColumn, setSortedColumn ] = useState(null);
   const [ sortOrder, setSortOrder ] = useState('asc');
@@ -111,24 +112,29 @@ export default function InventorySheet({ inventoryId }) {
     }
     return 0;
   });
+
+  const handleLoading = () => {
+    setIsLoading(false)
+  }
   
 
   useEffect(() => {
     fetchInventoryItems(inventoryId);
     setActiveInventory(inventoryId)
+    setIsLoading(false)
   }, [inventoryId])
 
   return (
-    <div>
-      <button
-        onClick={(e) => handleSubmit(e)}
-      >Submit</button>
-      <button
-        onClick={(e) => exportToCSV(e, inventoryId)}
-      >Export to CSV</button>
+    <div>        
       <div>
-        
-      </div>
+      { isLoading ? 
+        <Spinner
+          className="m-5"
+          color="success"
+          >
+          Loading...
+        </Spinner>
+      :
       <Form>
         <Table striped>
           <thead>
@@ -158,18 +164,19 @@ export default function InventorySheet({ inventoryId }) {
               <td>{i.count_by}</td>
               <td>
                 <Input
-                key={i.inventory_item_id}
-                type="number"
-                id="quantity"
-                name={i.inventory_item_id}
-                onChange={(e) => handleChange(e, i.price, i.total)}
-                defaultValue={i.quantity}
+                  key={i.inventory_item_id}
+                  type="number"
+                  id="quantity"
+                  name={i.inventory_item_id}
+                  onChange={(e) => handleChange(e, i.price, i.total)}
+                  defaultValue={i.quantity}
+                  onLoad={handleLoading}
                 />
                 </td>
                 <td>$ {i.total}</td>
                 <td><Button
                   onClick={(e) => showItemDetail(e)}
-                >Details</Button></td>
+                  >Details</Button></td>
               </tr>
             ))}
 
@@ -179,12 +186,20 @@ export default function InventorySheet({ inventoryId }) {
                   currentItem={currentItem}
                   itemDetail={itemDetail}
                   setItemDetail={setItemDetail}
-                />
+                  />
               </tr>
             }
           </tbody>
         </Table>
       </Form>
+      } 
     </div>
+    <Button
+        onClick={(e) => handleSubmit(e)}
+      >Submit</Button>
+    <Button
+        onClick={(e) => exportToCSV(e, inventoryId)}
+      >Export to CSV</Button>
+  </div>
   )
 }

@@ -14,6 +14,10 @@ export default function InventoryTable({ handleView, activeLocation }) {
   const { inventory, locations } = useContext(DataContext);
   const [ activeInventory, setActiveInventory ] = useState([])
   const [ activeTabData, setActiveTabData ] = useState([])
+  // Sort State
+  const [ sortedColumn, setSortedColumn ] = useState(null);
+  const [ sortOrder, setSortOrder ] = useState('asc');
+
 
   // Convert Month to long form
   function getMonthName(monthNumber) {
@@ -35,6 +39,27 @@ export default function InventoryTable({ handleView, activeLocation }) {
     return location.name
   }
 
+  // Sortable Table
+  const handleSort = (column) => {
+    console.log('handleSort', column);
+    if (sortedColumn === column) {
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortedColumn(column);
+      setSortOrder('asc');
+    }
+  };
+
+  const sortedInventory = activeTabData.sort((a, b) => {
+    if (a[sortedColumn] < b[sortedColumn]) {
+      return sortOrder === 'asc' ? -1 : 1;
+    }
+    if (a[sortedColumn] > b[sortedColumn]) {
+      return sortOrder === 'asc' ? 1 : -1;
+    }
+    return 0;
+  });
+
   useEffect(() => {
     if (activeLocation === 'all') {
       axios
@@ -54,22 +79,23 @@ export default function InventoryTable({ handleView, activeLocation }) {
     }
   }, [activeLocation]);
 
+  console.log('activeTabData', sortedInventory)
 
   return (
     <Table>
       <thead>
         <tr>
-          <th>Location</th>
-          <th>Month</th>
-          <th>Year</th>
-          <th>Created By</th>
-          <th>Last Updated</th>
+          <th onClick={() => handleSort('name')} >Location</th>
+          <th onClick={() => handleSort('month')}>Month</th>
+          <th onClick={() => handleSort('year')}>Year</th>
+          <th onClick={() => handleSort('created_at')}>Created By</th>
+          <th onClick={() => handleSort('updated_at')}>Last Updated</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
         {activeLocation === 'all'
-          ? inventory.map((inventory) => (
+          ? sortedInventory.map((inventory) => (
               <tr key={inventory.inventory_id}>
                 <td>{getLocationName(inventory.location)}</td>
                 <td>{getMonthName(inventory.month)}</td>

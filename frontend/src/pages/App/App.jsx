@@ -9,6 +9,7 @@ import { getUser } from "../../utilities/users-api"
 import LandingPage from "../LandingPage/LandingPage";
 import InventoryPage from "../InventoryPage/InventoryPage";
 import BusinessPage from "../BusinessPage/BusinessPage";
+import InventoryCountPage from "../InventoryCountPage/InventoryCountPage";
 import Auth from "../AuthPage/AuthPage";
 
 // Component Imports
@@ -42,6 +43,7 @@ export default function App() {
         <Route path="/business" element={<BusinessPage />} />
         <Route path="/auth" element={<Auth user={user} business={business} />} />
         <Route path="/signup" element={<Login />} />
+        <Route path="/inventory/count" element={<InventoryCountPage />} />
       </Routes>
       : 
         <AuthPage />

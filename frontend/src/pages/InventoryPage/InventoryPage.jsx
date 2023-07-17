@@ -41,6 +41,7 @@ export default function InventoryCountPage() {
   const [activeInventoryId, setActiveInventoryId] = useState([])
   const [activeLocation, setActiveLocation] = useState([])
   const [activeTabData, setActiveTabData] = useState(null)
+  const [isLoading, setIsLoading] = useState(false);
 
 
   const handleShowCreateInventorySheet = () => {
@@ -59,13 +60,6 @@ export default function InventoryCountPage() {
         setActiveInventoryId(res.data.inventory_id)
       });
     setShowInventory(!showInventory)
-  }
-
-  // Convert the date to a readable format
-  function convertDateToName(month, year) {
-    const date = new Date(year, month - 1)
-    const formatedDate = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
-    return formatedDate
   }
 
   const handleChange = (e, id) => {
@@ -112,7 +106,6 @@ export default function InventoryCountPage() {
                 onClick={(e) => handleChange(e, l.location_id)}
                 style={{
                   cursor: 'pointer' ,
-                  // backgroundColor: 'coral',
                 }}
                 
               >
