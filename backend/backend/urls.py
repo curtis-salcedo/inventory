@@ -43,6 +43,7 @@ urlpatterns = [
     path('proxy/accounts/google/login/request/', views.google_login_proxy, name='google_login_proxy'),
     path('accounts/google/login/request/', views.google_login_proxy, name='google_login_proxy'),
     path('redirect/', views.redirect_view, name='redirect'),
+    path('account/login/', views.login, name='login'),
 
     # Authenication URLs
     # path('api/signup/', views.signup, name='signup'),

@@ -24,6 +24,7 @@ export const DataProvider = (props) => {
       setUser(user);
 
       const locationResponse = await axios.get("/api/locations");
+      console.log(locationResponse.data);
       setLocations(locationResponse.data);
 
       const businessResponse = await axios.get(`/api/businesses/${user.business}`);

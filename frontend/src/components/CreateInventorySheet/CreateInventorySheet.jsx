@@ -6,12 +6,17 @@ import { DataContext } from '../../utilities/DataContext';
 // Component Imports
 
 // Styling Imports
+import '../Components.css';
 import {
   Button,
   Form,
   FormGroup,
   Input,
   Label,
+  Container,
+  Card,
+  CardHeader,
+  CardBody,
 } from "reactstrap";
 
 export default function CreateInventorySheet({ handleShowCreateInventoryShell }) {
@@ -96,49 +101,59 @@ export default function CreateInventorySheet({ handleShowCreateInventoryShell })
   return (
     <main>
       <div>
-        <h1>Create Inventory Sheet</h1>
       </div>
-      <Form>
-        <FormGroup>
-          <Label for="location">Location</Label>
-          <Input type="select" name="location" id="location" onChange={handleChange}>
-            <option value="null">Select Location</option>
-            {locations && locations.map((location) => {
-              return (
-                <option value={location.name} key={location.location_id}>{location.name}</option>
-              )
-            })}
-          </Input>
-        </FormGroup>
-        <FormGroup>
-          <Label for="month">Month</Label>
-          <Input type="select" name="month" id="month" onChange={handleChange}>
-            <option value="null">Select Month</option>
-            <option value="01">January</option>
-            <option value="02">February</option>
-            <option value="03">March</option>
-            <option value="04">April</option>
-            <option value="05">May</option>
-            <option value="06">June</option>
-            <option value="07">July</option>
-            <option value="08">August</option>
-            <option value="09">September</option>
-            <option value="10">October</option>
-            <option value="11">November</option>
-            <option value="12">December</option>
-          </Input>
-        </FormGroup>
-        <FormGroup>
-          <Label for="year">Year</Label>
-          <Input type="select" name="year" id="year" onChange={handleChange}>
-            <option value="null">Select Year</option>
-            <option value="2023">2023</option>
-            <option value="2024">2024</option>
-            <option value="2025">2025</option>
-          </Input>
-        </FormGroup>
-        <Button onClick={(e) => createInventory(e)}>Create Inventory Sheet</Button>
-      </Form>
+      <Container className='container'>
+        <Card>
+          <CardHeader>
+            <div className='title'>Create Inventory Sheet</div>
+          </CardHeader>
+          <CardBody>
+            <Form>
+              <FormGroup>
+                <Label for="location">Location</Label>
+                <Input type="select" name="location" id="location" onChange={handleChange}>
+                  <option value="null">Select Location</option>
+                  {locations && locations.map((location) => {
+                    return (
+                      <option value={location.name} key={location.location_id}>{location.name}</option>
+                    )
+                  })}
+                </Input>
+              </FormGroup>
+              <FormGroup>
+                <Label for="month">Month</Label>
+                <Input type="select" name="month" id="month" onChange={handleChange}>
+                  <option value="null">Select Month</option>
+                  <option value="01">January</option>
+                  <option value="02">February</option>
+                  <option value="03">March</option>
+                  <option value="04">April</option>
+                  <option value="05">May</option>
+                  <option value="06">June</option>
+                  <option value="07">July</option>
+                  <option value="08">August</option>
+                  <option value="09">September</option>
+                  <option value="10">October</option>
+                  <option value="11">November</option>
+                  <option value="12">December</option>
+                </Input>
+              </FormGroup>
+              <FormGroup>
+                <Label for="year">Year</Label>
+                <Input type="select" name="year" id="year" onChange={handleChange}>
+                  <option value="null">Select Year</option>
+                  <option value="2023">2023</option>
+                  <option value="2024">2024</option>
+                  <option value="2025">2025</option>
+                </Input>
+              </FormGroup>
+            <div className='button-group'>
+              <Button color='primary' onClick={(e) => createInventory(e)}>Create</Button>
+            </div>
+          </Form>
+          </CardBody>
+        </Card>
+      </Container>
     </main>
   )
 

@@ -13,8 +13,6 @@ import './NavBar.css'
 
 // Style Imports
 import { 
-  Alert,
-  Button,
   Dropdown,
   DropdownToggle,
   DropdownMenu,
@@ -38,7 +36,6 @@ export default function NavBar({ user, business }) {
   return (
   <nav>
     <div className="NavBarContainer">
-
     <div className="NavBarLogo">
       <span className="NavBarOne">Inventory</span> 
       <span className="NavBarTwo">Buddy</span>
