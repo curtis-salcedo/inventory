@@ -7,6 +7,7 @@ import { exportToCSV } from '../../utilities/exportData';
 import ItemDetail from '../ItemDetail/ItemDetail';
 
 // Styling Imports
+import './InventorySheet.css';
 import {
   Button,
   Form,
@@ -82,6 +83,7 @@ export default function InventorySheet({ inventoryId }) {
     .then((res) => {
       console.log('fetch inventory items at inventory sheet',res.data)
       setActiveInventoryItems(res.data)
+      setIsLoading(false)
     })
     .catch((error) => {
       console.error('Error fetching inventory items:', error);
@@ -121,12 +123,11 @@ export default function InventorySheet({ inventoryId }) {
   useEffect(() => {
     fetchInventoryItems(inventoryId);
     setActiveInventory(inventoryId)
-    setIsLoading(false)
   }, [inventoryId])
 
   return (
     <div>        
-      <div>
+      <div className='inventory-sheet-container'>
       { isLoading ? 
         <Spinner
           className="m-5"
@@ -136,8 +137,9 @@ export default function InventorySheet({ inventoryId }) {
         </Spinner>
       :
       <Form>
-        <Table striped>
-          <thead>
+        <div className='product-table-container'>
+        <Table className='product-table' hover striped size="sm">
+          <thead  className='product-table-header'>
             <tr>
               <th onClick={() => handleSort('inventory_item_id')}>Product Number</th>
               <th onClick={() => handleSort('name')}>Name</th>
@@ -151,7 +153,7 @@ export default function InventorySheet({ inventoryId }) {
               <th onClick={() => handleSort('details')}>Details</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className='product-table-body'>
             { sortedItems &&
             sortedItems.map((i) => (
               <tr key={i.inventory_item_id}>
@@ -171,10 +173,10 @@ export default function InventorySheet({ inventoryId }) {
                   onChange={(e) => handleChange(e, i.price, i.total)}
                   defaultValue={i.quantity}
                   onLoad={handleLoading}
-                />
+                  />
                 </td>
                 <td>$ {i.total}</td>
-                <td><Button
+                <td className='product-table-button'><Button size='sm' color='success'
                   onClick={(e) => showItemDetail(e)}
                   >Details</Button></td>
               </tr>
@@ -191,15 +193,14 @@ export default function InventorySheet({ inventoryId }) {
             }
           </tbody>
         </Table>
+        </div>
       </Form>
       } 
     </div>
-    <Button
-        onClick={(e) => handleSubmit(e)}
-      >Submit</Button>
-    <Button
-        onClick={(e) => exportToCSV(e, inventoryId)}
-      >Export to CSV</Button>
+    <div className='inventory-sheet-button-container'>
+      <Button color='success' size='md' className='inventory-sheet-button' onClick={(e) => handleSubmit(e)}>Submit</Button>
+      <Button color='success' size='md' className='inventory-sheet-button' onClick={(e) => exportToCSV(e, inventoryId)}>Export to CSV</Button>
+    </div>
   </div>
   )
 }

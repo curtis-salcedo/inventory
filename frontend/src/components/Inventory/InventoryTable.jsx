@@ -82,57 +82,59 @@ export default function InventoryTable({ handleView, activeLocation }) {
   console.log('activeTabData', sortedInventory)
 
   return (
-    <Table>
-      <thead>
-        <tr>
-          <th onClick={() => handleSort('name')} >Location</th>
-          <th onClick={() => handleSort('month')}>Month</th>
-          <th onClick={() => handleSort('year')}>Year</th>
-          <th onClick={() => handleSort('created_at')}>Created By</th>
-          <th onClick={() => handleSort('updated_at')}>Last Updated</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {activeLocation === 'all'
-          ? sortedInventory.map((inventory) => (
+    <div>
+      <Table>
+        <thead>
+          <tr>
+            <th onClick={() => handleSort('name')} >Location</th>
+            <th onClick={() => handleSort('month')}>Month</th>
+            <th onClick={() => handleSort('year')}>Year</th>
+            <th onClick={() => handleSort('created_at')}>Created By</th>
+            <th onClick={() => handleSort('updated_at')}>Last Updated</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {activeLocation === 'all'
+            ? sortedInventory.map((inventory) => (
               <tr key={inventory.inventory_id}>
-                <td>{getLocationName(inventory.location)}</td>
-                <td>{getMonthName(inventory.month)}</td>
-                <td>{inventory.year}</td>
-                <td>{inventory.user_email}</td>
-                <td>{getDate(inventory.updated_at)}</td>
-                <td>
-                  <Button
-                    color="success"
-                    size="sm"
-                    onClick={(e) => handleView(e, inventory.inventory_id)}
-                  >
-                    Open
-                  </Button>
-                </td>
-              </tr>
-            ))
-          : activeTabData.map((inventory) => (
-              <tr key={inventory.inventory_id}>
-                <td>{getLocationName(inventory.location)}</td>
-                <td>{getMonthName(inventory.month)}</td>
-                <td>{inventory.year}</td>
-                <td>{inventory.user_email}</td>
-                <td>{getDate(inventory.updated_at)}</td>
-                <td>
-                  <Button
-                    color="success"
-                    size="sm"
-                    onClick={(e) => handleView(e, inventory.inventory_id)}
-                  >
-                    Open
-                  </Button>
-                </td>
-              </tr>
-            ))
-        }
-      </tbody>
-    </Table>
+                  <td>{getLocationName(inventory.location)}</td>
+                  <td>{getMonthName(inventory.month)}</td>
+                  <td>{inventory.year}</td>
+                  <td>{inventory.user_email}</td>
+                  <td>{getDate(inventory.updated_at)}</td>
+                  <td>
+                    <Button
+                      color="success"
+                      size="sm"
+                      onClick={(e) => handleView(e, inventory.inventory_id)}
+                    >
+                      Open
+                    </Button>
+                  </td>
+                </tr>
+              ))
+              : activeTabData.map((inventory) => (
+                <tr key={inventory.inventory_id}>
+                  <td>{getLocationName(inventory.location)}</td>
+                  <td>{getMonthName(inventory.month)}</td>
+                  <td>{inventory.year}</td>
+                  <td>{inventory.user_email}</td>
+                  <td>{getDate(inventory.updated_at)}</td>
+                  <td>
+                    <Button
+                      color="success"
+                      size="sm"
+                      onClick={(e) => handleView(e, inventory.inventory_id)}
+                      >
+                      Open
+                    </Button>
+                  </td>
+                </tr>
+              ))
+          }
+        </tbody>
+      </Table>
+    </div>
   )
 }

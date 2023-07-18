@@ -1,0 +1,41 @@
+.category-container {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  height: 100%;
+  width: 90%;
+}
+
+.category-card {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: center;
+  width: 280px;
+  height: 280px;
+  margin: 5px;
+  overflow: hidden;
+}
+
+.category-card:hover {
+  box-shadow: 0 0 11px rgba(33,33,33,.2); 
+}
+
+.category-card-button {
+  text-align: center;
+  width: 200px;
+  height: 40px;
+  font-size: 16px;
+}
+
+.category-add-button {
+  margin: 16px;
+  height: 200px;
+  width: 200px;
+}
+
+.category-add-button:hover {
+  box-shadow: 0 0 11px rgba(33,33,33,.2); 
+}

@@ -79,27 +79,10 @@ export default function InventoryCountPage() {
   return (
     <main className='inventory-page-container'>
       <div>
-
-        <Button
-          color='primary'
-          onClick={() => handleShowCreateInventorySheet()}
-          className='inventory-page-button'
-          style={{
-            width: '18rem',
-          }}>Create Inventory Sheet</Button>
-      </div>
-      <div>
-        { showCreateInventorySheet ? (
-          <CreateInventorySheet
-          handleShowCreateInventoryShell={handleShowCreateInventorySheet} />
-          ) : ( null
-        )}
-      </div>
-      <div>
       <Nav tabs>
           <NavItem>
             <NavLink
-              className={activeLocation === 'all' ? 'active' : ''}
+              className={`tab-link ${activeLocation === 'all' ? 'active' : ''}`}
               onClick={(e) => handleChange(e, 'all')}
               style={{ cursor: 'pointer' }}
             >
@@ -109,10 +92,10 @@ export default function InventoryCountPage() {
           {locations && locations.map((l) => (
             <NavItem key={l.location_id}>
               <NavLink
-                className={activeLocation === l.location_id ? 'active' : ''}
+                className={`tab-link ${activeLocation === l.location_id ? 'active' : ''}`}
                 onClick={(e) => handleChange(e, l.location_id)}
                 style={{
-                  cursor: 'pointer' ,
+                  cursor: 'pointer',
                 }}
                 
               >
@@ -121,6 +104,20 @@ export default function InventoryCountPage() {
             </NavItem>
           ))}
         </Nav>
+        <div className='inventory-page-button-container'>
+          <Button
+            color='primary'
+            onClick={() => handleShowCreateInventorySheet()}
+            className='inventory-page-create-button'
+          >Create Inventory Sheet</Button>
+        </div>
+        <div>
+          { showCreateInventorySheet ? 
+            <CreateInventorySheet
+            handleShowCreateInventoryShell={handleShowCreateInventorySheet} />
+            :  null
+          }
+        </div>
       </div>
 
       <InventoryTable handleView={handleView} activeLocation={activeLocation} />

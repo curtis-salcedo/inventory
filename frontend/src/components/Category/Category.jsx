@@ -8,7 +8,7 @@ import { DataContext } from '../../utilities/DataContext';
 import CategoryModal from './CategoryModal'
 
 // Styling Imports
-import '../Components.css'
+import './Category.css'
 import {
   Card,
   CardBody,
@@ -106,14 +106,8 @@ export default function Category() {
   };
 
   return (
-    <main className="category-container">
-      <Container>
-        <div className='button-group'>
-          <Button color='success' onClick={() => showModal()}>Add Category</Button>
-        </div>
-        <div className='horizontal-scroll'>
-          <Row>
-            <Col style={{ display:'flex', flexDirection:'row', overflowX:'auto', justifyContent:'center', alignItems:'center' }}>
+    <main>
+      <Container className="category-container">
             { categoryList && (
               categoryList.map((c) => (
               <Card key={c.category_id} md={3} className='category-card'>
@@ -123,7 +117,7 @@ export default function Category() {
                   <CardText>This is quick access to all the products that are from the {c.name.toUpperCase()} category</CardText>
                   <CardFooter style={{ backgroundColor:'white'}}>
                     <div className='category-card-button-group'>
-                      <Button color='success' onClick={() => editCategory(c)}>Edit</Button>
+                      <Button className='category-card-button' color='success' onClick={() => editCategory(c)}>Edit</Button>
                       {/* <Button color='success' >Products in Category</Button> */}
                     </div>
                   </CardFooter>
@@ -131,13 +125,11 @@ export default function Category() {
               </Card>
               ))
               )}
-            </Col>
-          </Row>
-        </div>
-      </Container>
       {modal ? (
         <CategoryModal activeItem={activeItem} toggle={toggle} onSave={handleSubmit} />
-      ) : null}
+        ) : 
+        <Button className='category-add-button' color='success' size="lg" onClick={() => showModal()}>Add Category</Button>}
+        </Container>
     </main>
   );
 }

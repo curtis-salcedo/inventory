@@ -24,7 +24,7 @@ import {
 
 } from 'reactstrap';
 
-import '../Components.css'
+import './Location.css'
 
 export default function Location() {
   const { locations, business, setLocations, user } = useContext(DataContext);
@@ -74,77 +74,47 @@ export default function Location() {
 
   return ( 
     <main>
-      <Container>
-        <Row className="custom-card-container">
+      <Container className='location-container'>
           {locations ? (
             locations.map((location, index) => (
-              <Col md={3} key={index}>
-                <Card
-                  className="my-2"
-                  color="primary"
-                  outline
-                  style={{
-                    width: '18rem'
-                  }}
-                >
+              <Card
+                key={index}
+                className="location-card"
+                color="primary"
+                outline
+              >
+                <CardBody>
+                  <CardHeader className='custom-card-header'>{location.business_name}</CardHeader>
+                  <CardTitle>{location.name}</CardTitle>
                   <CardBody>
-                    <CardHeader className='custom-card-header'>{location.business_name}</CardHeader>
-                    <CardTitle>{location.name}</CardTitle>
-                    <CardText>Address: {location.address}</CardText>
-                    <CardText>
-                      <Table>
-                        <thead>
-                          <tr>
-                            <th>Latest Inventories</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>
-                              <Button>View</Button>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </Table>
-                    </CardText>
-                    <CardFooter className='custom-card-footer'>
-                      <Button>More</Button>
-                    </CardFooter>
+                  <CardText>Address: {location.address}</CardText>
+                    <Table>
+                      <thead>
+                        <tr>
+                          <th>Latest Inventories</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <Button>View</Button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </Table>
                   </CardBody>
-                </Card>
-              </Col>
+                  <CardFooter className='custom-card-footer'>
+                    <Button>More</Button>
+                  </CardFooter>
+                </CardBody>
+              </Card>
             ))
             
 
             ) : (
             <div>Loading...</div>
             )}
-            <Col>
-              <Card
-                className="my-2"
-                color="primary"
-                outline
-                style={{
-                  width: '18rem',
-                  height: '12rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  backgroundColor: '#f8f9fa',
-                }}
-              >
-                <CardBody
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                  }}
-                >
-                  <Button color='primary' size="lg" onClick={() => showModal()}>Add Location</Button>
-                </CardBody>
-              </Card>
-            </Col>
-        </Row>
+            <Button className='location-add-button' color='success' size="lg" onClick={() => showModal()}>Add Location</Button>
       </Container>
       {modal ? (
         <LocationModal activeItem={activeItem} toggle={toggle} onSave={handleSubmit} />

@@ -21,28 +21,3 @@
   justify-content: center;
   margin: .5rem;
 }
-
-.category-card {
-  width: 18rem;
-  margin-right: .5rem;
-  margin-left: .5rem;
-}
-
-.category-card-button-group {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  margin: .5rem;
-}
-
-.category-container {
-  margin-bottom: 1rem;
-}
-
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto;
-}

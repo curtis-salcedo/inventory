@@ -138,7 +138,7 @@ export default function ProductTable({ setShowImportCSV, showImportCSV }) {
         <Button color='success' className='button-group' onClick={handleCreateProduct}>Add Product</Button>
         <Button color='success' className='button-group' onClick={handleShowImport}>Import Data</Button>
       </div>
-      <div className='product-table-container' >
+      <div className='product-table-container'>
         <Table className='product-table' hover striped size="sm" >
           <thead className='product-table-header'>
             <tr>

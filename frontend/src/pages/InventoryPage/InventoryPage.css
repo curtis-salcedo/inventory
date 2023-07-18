@@ -1,6 +1,7 @@
 .inventory-page-container {
   display: flex;
   flex-direction: column;
+  margin-top: 2rem;
 }
 
 .inventory-page-button {
@@ -8,4 +9,28 @@
   display: flex;
   justify-content: center;
   margin: 0 auto;
+}
+
+.inventory-page-button-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.inventory-page-create-button {
+  margin: 16px;
+}
+
+.tab-link {
+  color: black;
+  background-color: lightgray;
+  border: none;
+  margin-right: 5px;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.tab-link.active {
+  color: black;
 }
