@@ -24,11 +24,11 @@ export const DataProvider = (props) => {
       setUser(user);
 
       const locationResponse = await axios.get("/api/locations");
-      console.log(locationResponse.data);
+      // console.log(locationResponse.data);
       setLocations(locationResponse.data);
 
       const businessResponse = await axios.get(`/api/businesses/${user.business}`);
-      console.log(businessResponse.data)
+      // console.log(businessResponse.data)
       setBusiness(businessResponse.data);
 
       const productResponse = await axios.get("/api/products");

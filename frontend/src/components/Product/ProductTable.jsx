@@ -10,6 +10,7 @@ import EditProductModal from './EditProductModal';
 import AddProductModal from '../AddProduct/AddProductModal';
 
 // Styling Imports
+import './Product.css';
 import {
   Table,
   Button,
@@ -137,51 +138,55 @@ export default function ProductTable({ setShowImportCSV, showImportCSV }) {
         <Button color='success' className='button-group' onClick={handleCreateProduct}>Add Product</Button>
         <Button color='success' className='button-group' onClick={handleShowImport}>Import Data</Button>
       </div>
-      <Table hover striped size="sm" >
-        <thead>
-          <tr>
-            <th>#</th>
-            <th onClick={() => handleSort('name')}>Name</th>
-            <th onClick={() => handleSort('category')}>Category</th>
-            <th onClick={() => handleSort('sub_category')}>Sub-Category</th>
-            <th onClick={() => handleSort('price')}>Price</th>
-            <th onClick={() => handleSort('vendor')}>Vendor</th>
-            <th onClick={() => handleSort('case_size')}>Case Size</th>
-            <th onClick={() => handleSort('pack_type')}>Pack Type</th>
-            <th onClick={() => handleSort('count_by')}>Count By</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {products ? (
-            products.map((p) => (
-              <tr scope="row" key={p.product_id}>
-                <td>{p.number}</td>
-                <td>{p.name}</td>
-                <td>{p.category}</td>
-                <td>{p.sub_category || 'None'}</td>
-                <td>$ {p.price}</td>
-                <td>{p.vendor}</td>
-                <td>{p.case_size}</td>
-                <td>{p.pack_type}</td>
-                <td>{p.count_by}</td>
-                <td>
-                  <Button onClick={(e) => showProduct(e, p)} size="sm" color="primary">
-                    Details
-                  </Button>
-                  <Button onClick={(e) => showEditProduct(e, p)} size="sm" color="primary">
-                    Edit
-                  </Button>
-                </td>
-              </tr>
-            ))
-          ) : (
+      <div className='product-table-container' >
+        <Table className='product-table' hover striped size="sm" >
+          <thead className='product-table-header'>
             <tr>
-              <td colSpan={8}>No products found.</td>
+              <th>#</th>
+              <th onClick={() => handleSort('name')}>Name</th>
+              <th onClick={() => handleSort('category')}>Category</th>
+              <th onClick={() => handleSort('sub_category')}>Sub-Category</th>
+              <th onClick={() => handleSort('price')}>Price</th>
+              <th onClick={() => handleSort('vendor')}>Vendor</th>
+              <th onClick={() => handleSort('case_size')}>Case Size</th>
+              <th onClick={() => handleSort('pack_type')}>Pack Type</th>
+              <th onClick={() => handleSort('count_by')}>Count By</th>
+              <th></th>
             </tr>
-          )}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody className='product-table-body'>
+            {products ? (
+              products.map((p) => (
+                <tr scope="row" key={p.product_id}>
+                  <td>{p.number}</td>
+                  <td>{p.name}</td>
+                  <td>{p.category}</td>
+                  <td>{p.sub_category || 'None'}</td>
+                  <td>$ {p.price}</td>
+                  <td>{p.vendor}</td>
+                  <td>{p.case_size}</td>
+                  <td>{p.pack_type}</td>
+                  <td>{p.count_by}</td>
+                  <td>
+                    <div className='product-table-buttons'>
+                      <Button onClick={(e) => showProduct(e, p)} size="sm" color="primary">
+                        Details
+                      </Button>
+                      <Button onClick={(e) => showEditProduct(e, p)} size="sm" color="primary">
+                        Edit
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={8}>No products found.</td>
+              </tr>
+            )}
+          </tbody>
+        </Table>
+      </div>
       {/* Show Product Modal */}
       {showProductModal && (
         <ProductModal

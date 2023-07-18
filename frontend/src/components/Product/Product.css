@@ -1,0 +1,48 @@
+.product-table-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.product-table {
+  width: 95%;
+  border-collapse: collapse;
+  border: 1px solid rgba(0, 0, 153, 0.5);
+  margin: 0 auto;
+}
+
+.product-table td {
+  border: 1px solid rgba(0, 0, 153, 0.5);
+  
+}
+
+.product-table-header {
+  text-align: center;
+  font-size: 16px;
+}
+
+.product-table-body {
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.product-table-body > tr {
+  border: 1px solid rgba(0, 0, 153, 0.5);
+  align-items: center;
+  text-align: center;
+  vertical-align: middle; /* Add this line to vertically center the content */
+}
+
+.product-table-buttons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.product-table-button {
+  margin: 0 auto;
+}

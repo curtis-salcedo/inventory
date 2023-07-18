@@ -11,6 +11,7 @@ import InventoryPage from "../InventoryPage/InventoryPage";
 import BusinessPage from "../BusinessPage/BusinessPage";
 import InventoryCountPage from "../InventoryCountPage/InventoryCountPage";
 import Auth from "../AuthPage/AuthPage";
+import UserPage from "../UserPage/UserPage";
 
 // Component Imports
 import NavBar from "../../components/NavBar/NavBar";
@@ -38,6 +39,7 @@ export default function App() {
       <Routes>
         {/* Route components in here */}
         <Route path="/" element={<LandingPage />} />
+        <Route path="/user" element={<UserPage user={user} setUser={setUser} />} />
         <Route path="/inventory" element={<InventoryPage />} />
         <Route path="/business" element={<BusinessPage />} />
         <Route path="/auth" element={<Auth user={user} business={business} />} />

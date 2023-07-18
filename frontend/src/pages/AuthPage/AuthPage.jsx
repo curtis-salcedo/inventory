@@ -6,6 +6,7 @@ import { logoutUser, login_url, signup_url } from "../../utilities/users-api"
 import { DataContext } from '../../utilities/DataContext';
 
 // Component Imports
+import NavBar from '../../components/NavBar/NavBar';
 
 // Style Imports
 import './AuthPage.css';

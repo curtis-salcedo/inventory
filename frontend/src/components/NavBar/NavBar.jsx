@@ -17,6 +17,7 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
+  UncontrolledDropdown,
   Nav,
   NavItem,
   NavLink,
@@ -37,8 +38,10 @@ export default function NavBar({ user, business }) {
   <nav>
     <div className="NavBarContainer">
     <div className="NavBarLogo">
-      <span className="NavBarOne">Inventory</span> 
-      <span className="NavBarTwo">Buddy</span>
+      <Link className='logo-link'>
+        <span className="NavBarOne">Inventory</span> 
+        <span className="NavBarTwo">Buddy</span>
+      </Link>
     </div>
 
     <div className="NavBarLinks">
@@ -48,24 +51,29 @@ export default function NavBar({ user, business }) {
             <NavLink href="/">Home</NavLink>
           </NavItem>
           <NavItem>
-            <NavLink href="/inventory">Count Inventory</NavLink>
+            <NavLink href="/inventory">Count</NavLink>
           </NavItem>
           <NavItem>
-            <NavLink href="/business">My Business Page</NavLink>
+            <NavLink href="/business">Business</NavLink>
           </NavItem>
-          <Dropdown isOpen={dropdownOpen} toggle={toggle} direction="down" > 
-            <DropdownToggle caret size="md" >
-              Account
-            </DropdownToggle>
-            <DropdownMenu>
+          <NavItem>
+            <NavLink href="/user">Account</NavLink>
+          </NavItem>
+
+          {/* <UncontrolledDropdown nav inNavbar direction='down'>
+              <DropdownToggle nav caret>
+                Account
+              </DropdownToggle>
+              <DropdownMenu>
               <DropdownItem header>{user.email}</DropdownItem>
-              <DropdownItem href="/business">Account Business</DropdownItem>
+              <DropdownItem>Account Business</DropdownItem>
               <DropdownItem href="/auth">Account User</DropdownItem>
               <DropdownItem color="danger" onClick={(e) => handleLogout(e)}>
                   Logout
               </DropdownItem>
             </DropdownMenu>
-          </Dropdown>
+            </UncontrolledDropdown> */}
+
         </Nav>
 
           :
