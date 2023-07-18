@@ -1,0 +1,57 @@
+:root {
+  --main-color: #cc0000;
+  --primary-color: #000099;
+  --secondary-color: #FFEA00;
+  --tertiary-color: #004d00;
+  --accent-color: #000000;
+}
+
+.NavBarContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.NavBarLogo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 20px;
+  height: 45px;
+  width: auto;
+  font-size: 2em;
+  font-weight: bold;
+  border: 3px solid var(--secondary-color);
+  padding-left: 3px;
+  padding-right: 3px;
+  padding-bottom: 3px;
+}
+
+.NavBarOne {
+  color: var(--main-color);
+}
+
+.NavBarTwo {
+  color: var(--primary-color);
+}
+
+.NavBarLinks {
+  display: flex;
+  align-items: center;
+}
+
+.NavBarLinks a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: .75em;
+  border: 2px solid var(--main-color);
+  border-radius: 1vmin;
+  padding-left: .5em;
+  padding-right: .5em;
+  padding-bottom: .5em;
+  height: 35px;
+  text-decoration: none;
+  font-weight: bold;
+}

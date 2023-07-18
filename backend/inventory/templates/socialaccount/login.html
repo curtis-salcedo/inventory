@@ -1,0 +1,31 @@
+{% extends "socialaccount/base.html" %}
+{% load i18n %}
+
+{% block head_title %}{% trans "Sign In" %}{% endblock %}
+
+{% block content %}
+{% if process == "connect" %}
+
+<h1>{% blocktrans with provider.name as provider %}Connect {{ provider }}{% endblocktrans %}</h1>
+
+<p>{% blocktrans with provider.name as provider %}You are about to connect a new third party account from {{ provider }}.{% endblocktrans %}</p>
+{% else %}
+
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <h3>{% blocktrans with provider.name as provider %}Sign In with your account from {{ provider }}{% endblocktrans %}</h3>
+    </div>
+    <div class="card-body">
+      <p>{% blocktrans with provider.name as provider %}Press "Continue" to are about to sign in using a third party account from {{ provider }}.{% endblocktrans %}</p>
+      {% endif %}
+      <form method="post">
+        {% csrf_token %}
+        <button class="btn btn-primary" type="submit">{% trans "Continue" %}</button>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

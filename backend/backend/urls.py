@@ -45,7 +45,7 @@ urlpatterns = [
     path('redirect/', views.redirect_view, name='redirect'),
 
     # Authenication URLs
-    path('api/signup/', views.signup, name='signup'),
+    # path('api/signup/', views.signup, name='signup'),
     path('api/login/', views.user_login, name='user_login'),
     path('api/logout/', views.user_logout, name='user_logout'),
     path('api/get_user/', views.get_user, name='get_user'),

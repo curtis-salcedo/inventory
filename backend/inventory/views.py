@@ -16,6 +16,8 @@ from .serializers import CustomUserSerializer, BusinessSerializer, LocationSeria
 
 from .models import CustomUser, Business, Location, Category, Product, InventoryItem, Inventory, SubCategory
 
+from .forms import CustomSignupForm
+
 import json, csv
 # Create your views here.
 class CustomUserView(viewsets.ModelViewSet):
@@ -60,8 +62,6 @@ def home(request):
 #     redirect_url = 'http://localhost:8000/accounts/google/login/' 
 #     # return JsonResponse({'redirect_url': redirect_url})
 #     return JsonResponse({'redirect_url': redirect_url}, status=status.HTTP_200_OK, safe=False)
-
-import csv
 
 def import_products(request):
     user = request.user

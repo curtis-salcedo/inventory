@@ -18,6 +18,7 @@ environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+print(BASE_DIR)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -39,6 +40,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django.contrib.admin',
+    'django.contrib.staticfiles',
 
     # For rest-auth
     'rest_framework',
@@ -51,7 +53,6 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
     # For allauth
     'allauth',
     'allauth.account',
@@ -79,6 +80,7 @@ SOCIALACCOUNT_PROVIDERS = {
 
 
 # Custom User model class
+print('templates dirs', os.path.join(BASE_DIR, 'inventory/templates'))
 
 
 MIDDLEWARE = [
@@ -98,7 +100,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'templates')
+            os.path.join(BASE_DIR, 'inventory/templates')
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -179,11 +181,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'inventory')
 STATIC_URL = 'static/'
+print('static_root', STATIC_ROOT)
 
 LOGIN_REDIRECT_URL = '/redirect/'
 
-LOGOUT_REDIRECT_URL = '/accounts/login/'
+LOGOUT_REDIRECT_URL = '/login/'
 
 
 # Default primary key field type
